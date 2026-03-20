@@ -51,7 +51,7 @@
 }
 
 .about-short{
-    width : 680px;
+    width : 600px;
     height : 400px;
     display:inline-block;
 
@@ -97,8 +97,8 @@
 
 .info-link{
     display:inline-block;
-    margin-left : 20px;
-    width : 680px ;
+    margin-left : 200px;
+    width : 600px ;
     height : 400px;
 
 }
@@ -126,8 +126,9 @@
 }
 .projects{
     display : inline-block;
-    background-color : white;
+    background-color : #A3E635 ;
     width : 405px;
     height:100px;
     margin-top : 45px;
+    box-shadow : 4px 4px 0px rgb(255, 255, 255);
 }
