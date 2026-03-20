@@ -1,0 +1,133 @@
+.body{
+    background: #080510;
+}
+
+.intro-border{
+    display : flex;
+    max-width : 1300px;
+    height: 44px;
+    margin : 0 auto;
+    margin-top : 280px;
+    align-items : center;
+    background : rgb(0, 19, 44);
+    margin-bottom : 0px;
+}
+
+.ayyo {
+    color : #B6AAF6;
+    padding-top : 0px;
+    font-family : "Fira Code", monospace;
+    font-weight : bold;
+    font-size : 24px;
+}
+
+.name-box{
+    max-width : 1300px;
+    height : 150px;
+    margin : 0 auto;
+    margin-top : 15px;
+    
+
+}
+
+.initial-name{
+    color : #FCFF41;
+    font-family : "Orbitron", sans-serif;
+    font-size : 64px;
+    padding-top : 0;
+    margin-top : 0;
+    padding-right : 200px;
+    font-weight : bold;
+
+}
+
+.info{
+    display:flex;
+    max-width : 1300px;
+    height : 500px;
+    margin : 0 auto;
+    margin-top : 20px;
+    align-items : center;
+}
+
+.about-short{
+    width : 680px;
+    height : 400px;
+    display:inline-block;
+
+
+}
+
+.short-description {
+    font-family : "Fira Code", monospace;
+    font-weight : bold;
+    font-size : 24px;
+    color : #00FFC8;
+    padding-top : 0px;
+
+}
+
+.wanna{
+    display : inline-block;
+    font-family : "FiraCode", monospace;
+    color : white;
+    font-weight : bold;
+    font-size : 24px;
+}
+.about-link{
+    display : inline-block;
+    font-family : "Fira Code", monospace;
+    color : white;
+    font-weight : bold;
+    font-size : 24px;
+
+}
+
+.know-about{
+    color : white;
+}
+
+.know-about:visited{
+    color : white;
+}
+
+.know-about:hover{
+    color : #FCFF41;
+}
+
+.info-link{
+    display:inline-block;
+    margin-left : 20px;
+    width : 680px ;
+    height : 400px;
+
+}
+
+.buttons-links {
+    display : inline-block;
+    margin-top : 150px;
+
+}
+
+.github {
+    display : inline-block;
+    background-color : white;
+    width : 180px;
+    height : 100px;
+
+}
+
+.blog{
+    display : inline-block;
+    background-color : white;
+    width : 180px;
+    height : 100px;
+    margin-left : 41px;
+}
+.projects{
+    display : inline-block;
+    background-color : white;
+    width : 405px;
+    height:100px;
+    margin-top : 45px;
+}
