@@ -2,6 +2,27 @@
     background: #080510;
 }
 
+.input {
+    color : #B6AAF6;
+    background : rgb(0, 19, 44);
+    display : flex;
+    font-family : "Fira Code", monospace;
+    font-size : 24px;
+    font-weight : bold;
+    width : 1300px;
+    height : 44px;
+    margin : 0 auto;
+    margin-top : 100px;
+}
+
+a {
+    text-decoration: none;
+    color : black;
+}
+
+a:visited {
+    color : black;
+}
 .intro-border{
     display : flex;
     max-width : 1300px;
@@ -14,7 +35,6 @@
 }
 
 .ayyo {
-    color : #B6AAF6;
     padding-top : 0px;
     font-family : "Fira Code", monospace;
     font-weight : bold;
@@ -23,10 +43,10 @@
 
 .name-box{
     max-width : 1300px;
-    height : 150px;
+    height : 75px;
     margin : 0 auto;
     margin-top : 15px;
-    
+    margin-bottom : 0px;
 
 }
 
@@ -35,7 +55,8 @@
     font-family : "Orbitron", sans-serif;
     font-size : 64px;
     padding-top : 0;
-    margin-top : 0;
+    margin-top : 0px;
+    margin-bottom : 0;
     padding-right : 200px;
     font-weight : bold;
 
@@ -46,7 +67,7 @@
     max-width : 1300px;
     height : 500px;
     margin : 0 auto;
-    margin-top : 20px;
+    margin-top : 0px;
     align-items : center;
 }
 
@@ -62,7 +83,7 @@
     font-family : "Fira Code", monospace;
     font-weight : bold;
     font-size : 24px;
-    color : #00FFC8;
+    color : #CBD5E1;
     padding-top : 0px;
 
 }
@@ -85,6 +106,7 @@
 
 .know-about{
     color : white;
+    text-decoration: underline;
 }
 
 .know-about:visited{
@@ -109,26 +131,55 @@
 
 }
 
+.github-and-journal{
+    display : flex;
+}
+
 .github {
-    display : inline-block;
-    background-color : white;
+    display : flex;
+    justify-content : center;
+    align-items: center;
+    background-color : #34D399;
     width : 180px;
     height : 100px;
+    box-shadow : 2px 3px 0px rgb(255, 255, 255);
+
 
 }
 
+.button-text {
+    font-family : "Fira Code", monospace;
+    font-size : 40px;
+    font-weight : bold;
+    margin : 0 auto;
+
+}
+
+
 .blog{
-    display : inline-block;
-    background-color : white;
+    display : flex;
+    justify-content : center;
+    align-items: center;
+    background-color : #34D399;
     width : 180px;
     height : 100px;
     margin-left : 41px;
+    box-shadow : 2px 3px 0px white;
 }
+
 .projects{
-    display : inline-block;
-    background-color : #A3E635 ;
+    display : inline-flex;
+    background-color : #FCFF41 ;
     width : 405px;
+    align-items : center;
+    justify-content: center;
     height:100px;
     margin-top : 45px;
-    box-shadow : 4px 4px 0px rgb(255, 255, 255);
+    box-shadow : 2px 2px 0px rgb(255, 255, 255);
 }
+
+.about-text {
+    font-size : 48px;
+    color : white;
+}
+
