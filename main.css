@@ -3,18 +3,24 @@
 }
 
 .input {
-    color : #B6AAF6;
-    background : rgb(0, 19, 44);
+    color : #08a1b9;
+    background : #090300;
     display : flex;
     font-family : "Fira Code", monospace;
-    font-size : 24px;
+    font-size : 16px;
     font-weight : bold;
     width : 1300px;
-    height : 44px;
+    height : 34px;
     margin : 0 auto;
     margin-top : 100px;
 }
 
+input, textarea{
+    border-radius : 8px;
+}
+.input::placeholder{
+    color : #34D399;
+}
 a {
     text-decoration: none;
     color : black;
@@ -181,5 +187,38 @@ a:visited {
 .about-text {
     font-size : 48px;
     color : white;
+}
+
+#about{
+    display : flex;
+    flex-direction  : column;
+    background : linear-gradient(to bottom, #00332816, #00997816);
+    border-style : solid;
+    border-color : #00FFC8;
+    border-width : 4px;
+    height : 720px;
+    max-width : 1240px;
+    margin : 0 auto;
+    margin-top : 100px;
+    border-radius : 50px;
+    align-items : center;
+    padding-top : 0px;
+}
+
+.about-heading{
+    color : white;
+    padding-top : 0;
+    font-family : "Fira Code", monospace;
+    font-size : 64px;
+    margin : 0 auto;
+    margin-top : 0px;
+
+}
+
+.about-text {
+    margin : 0 auto;
+    font-size : 24px;
+    font-weight : bold;
+    margin-top : 50px;
 }
 
