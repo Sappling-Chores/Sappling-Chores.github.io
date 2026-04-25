@@ -12,8 +12,20 @@
     box-sizing: border-box;
 }
 
+a{
+    color : rgba(255, 255, 255, 1);
+}
+
+a:hover{
+    color : rgba(230, 255, 43, 1);
+}
+
+a:visited {
+    color : rgba(255, 255, 255 , 1);
+}
 body{
     background: rgba(22, 22, 22, 1);
+    padding-bottom: 64px;
 }
 
 .rightanglebracket{
@@ -74,10 +86,33 @@ body{
 }
 
 .contact-container{
-    margin-top : 5rem;
+    position : relative;
+    margin-top : 2rem;
+    padding-top : 3rem;
+    padding-bottom : 2.25rem;
     padding-left : 7.1875rem;
     display : flex;
     flex-direction: column;
+}
+
+.contact-container::before {
+  content: "";
+  position: absolute;
+  top: 0;              /* position */
+  left: 8rem;          /* start point */
+  width: 40rem;         /* length of line */
+  height: .0625rem;         /* thickness */
+  background: linear-gradient(90deg, white, white);
+}
+
+.contact-container::after{
+    content : "";
+    position : absolute;
+    bottom : 0;
+    right : 6rem;
+    width : 30rem;
+    height : 0.0625rem;
+    background  : linear-gradient(90deg, white, white);
 }
 
 #Contact{
@@ -85,3 +120,52 @@ body{
     font-size: 36px;
     color : rgba(230, 255, 43, 1);
 }
+
+#contact-detail{
+margin-top : 6px;
+margin-left : 2.5625rem;
+font-family: "Recursive", sans-serif;
+font-size: 20px;
+color : white;
+letter-spacing: 2px;
+font-optical-sizing: auto;
+font-weight: 400;
+font-style: normal;
+font-variation-settings:
+    "slnt" 0,
+    "CASL" 1,
+    "CRSV" 0.5,
+    "MONO" 1;
+}
+
+.navigation-container{
+    position : relative;
+    margin-top : 2rem;
+    padding-top : 3rem;
+    padding-bottom : 2.25rem;
+    padding-left : 7.1875rem;
+    display : flex;
+    flex-direction: column;
+}
+
+.navigation-label{
+    font-family: "Annie Use Your Telescope";
+    font-size: 36px;
+    color : rgba(230, 255, 43, 1);
+}
+
+#navigation {
+    text-decoration: none;
+    color : white;
+    margin-top : 1rem;
+    border : none;
+    width : 72.5rem;
+    height : 12.5rem;
+    background: rgba(0, 0, 0, 1);
+    margin-left : 2.5625rem;
+}
+
+#navigation:focus{
+    outline : none;
+}
+
