@@ -4,7 +4,7 @@
   await tsParticles.load({
     id: "tsparticles",
     options: {
-      fpsLimit: 120,
+      fpsLimit: 60,
       interactivity: {
         events: {
           onClick: { enable: true, mode: "push" },
@@ -13,15 +13,15 @@
         },
         modes: {
           push: { quantity: 4 },
-          repulse: { distance: 100, duration: 0.4 },
-          grab: { distance: 140, links: { opacity: 0.4 } }
+          repulse: { distance: 80, duration: 0.4 },
+          grab: { distance: 110, links: { opacity: 0.3 } }
         },
       },
       particles: {
         color: { value: "#ffffff" },
         links: { 
           enable: true, 
-          distance: 120, 
+          distance: 100, 
           color: "#ffffff", 
           opacity: 0.15, 
           width: 0.5 
@@ -36,7 +36,7 @@
         },
         number: {
           density: { enable: true, width: 400, height: 400 },
-          value: 150,
+          value: 90,
         },
         opacity: {
           value: { min: 0.1, max: 0.6 },
