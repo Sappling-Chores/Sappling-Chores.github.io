@@ -91,7 +91,9 @@ function openTerminal() {
 
 
 function closeTerminal(){
-  sapplingTerminal.classList.remove("active")
+  sapplingTerminal.classList.remove("active");
+  sapplingTerminal.style.left = (window.innerWidth / 2 - rect.width / 2) + 'px';
+  sapplingTerminal.style.top  = (window.innerHeight / 2 - rect.height / 2) + 'px';
 }
 
 function mouseClkCordTop(){
