@@ -64,7 +64,8 @@ const openTerminalButton = document.getElementById("open-terminal-button");
 const closeTerminalButton = document.getElementById("close-terminal-button");
 const sapplingTerminal = document.getElementById("terminal-container");
 const terminalTop = document.getElementById("terminal-top-container");
-const body = document.getElementById("body");
+const terminalOutput = document.getElementById("terminal-output");
+const Command = document.getElementById("command")
 
 let isDragging = false;
 
@@ -87,11 +88,14 @@ function openTerminal() {
   const rect = sapplingTerminal.getBoundingClientRect();
   sapplingTerminal.style.left = (window.innerWidth / 2 - rect.width / 2) + 'px';
   sapplingTerminal.style.top  = (window.innerHeight / 2 - rect.height / 2) + 'px';
+
+  Command.focus();
 }
 
 
 function closeTerminal(){
   sapplingTerminal.classList.remove("active");
+  const rect = sapplingTerminal.getBoundingClientRect();
   sapplingTerminal.style.left = (window.innerWidth / 2 - rect.width / 2) + 'px';
   sapplingTerminal.style.top  = (window.innerHeight / 2 - rect.height / 2) + 'px';
 }
@@ -113,8 +117,74 @@ function mouseClkCordTop(){
 
   }
 
+  const commandActions = {
+  help:     () => printToTerminal("Commands: about, projects, blog, email", "output"),
+  about:    () => window.location.href = "/About/index.html",   
+  projects: () => window.location.href = "/Projects/index.html",
+  blog:     () => window.location.href = "/blog/index.html",
+  email:    () => window.location.href = "mailto:itsmohammadsarfaraz@gmail.com",
+};
 
- 
+
+  function commmandInput(){
+    Command.addEventListener("keydown", (e) => {
+      if (e.key === "Enter"){
+        const cmd = Command.value.trim();
+        if (!cmd) return;
+
+        printToTerminal(cmd, "input");
+        Command.value = "";
+
+        if (commandActions[cmd]){
+        commandActions[cmd]();
+    }
+      }
+    })
+  }
+
+
+printToTerminal("Use this terminal for navigation");
+printToTerminal("");
+printToTerminal("Click on the command");
+printToTerminal("");
+printToTerminal("Or use the terminal")
+printToTerminal("");
+printToTerminal("");
+printToTerminal("");
+
+
+const commands = ["help", "about", "projects", "blog", "email"];
+
+for (let i = 0; i < commands.length; i++) {
+  printToTerminal(commands[i], "cmdclk");
+}
+
+
+function printToTerminal(text, type = "output") {
+    const line = document.createElement("div");
+    line.classList.add("terminal-line", type);
+    if (line.textContent = type === "cmdclk"){
+      line.addEventListener("click", (e) => {
+        commandActions[text]();
+      });
+    }
+    line.textContent = type === "input" ? "> " + text : text;
+    terminalOutput.appendChild(line);
+    terminalOutput.scrollTop = terminalOutput.scrollHeight;
+}
+
+
+
+// let commands = ["help", "about", "projects", "blog", "email"];
+
+// for (let i = 0; i < commands.length ; i++){
+//   printToTerminal(commands[i], "cmdclk");
+// }
+
+
+
+
+  
   // function mouseClkCordVW(){
   //   body.addEventListener("mousemove", (e) =>{
   //     if (e.buttons == 0) {
@@ -131,8 +201,9 @@ function mouseClkCordTop(){
   // if (e.button){
   //   sapplingTerminal.style.boxShadow = "4px 4px 0px rgba(0, 0, 0, 1)";
   // }
+
 openTerminalButton.addEventListener("click", openTerminal);
 closeTerminalButton.addEventListener("click", closeTerminal);
 mouseClkCordTop();
-printEverthing();
+commmandInput();
 // mouseClkCordVW();

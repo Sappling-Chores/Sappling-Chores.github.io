@@ -199,6 +199,8 @@ font-variation-settings:
     position: absolute;
     width : 444px;
     opacity: 0;
+    /* top : 0;
+    left : 0; */
     pointer-events: none;
 }
 
@@ -252,7 +254,7 @@ font-variation-settings:
     font-weight : bold;
 }
 
-.terminal-output-container{
+#terminal-output{
     width : 444px;
     height : 282px;
     background: black;
@@ -260,6 +262,9 @@ font-variation-settings:
     border-right : solid 2px white;
     border-top : none;
     border-bottom : none;
+    word-break: break-all;
+    overflow-y: auto;
+    overflow-x: auto;
 
 }
 
@@ -284,6 +289,12 @@ font-variation-settings:
     border-bottom : solid 2px white;
     color : white;
 
+    font-family: "Intel One Mono", monospace;
+    font-size: 16px;
+    font-weight: bold;
+    padding-left: 6px;
+
+
 }
 
 #command:focus {
@@ -291,4 +302,34 @@ font-variation-settings:
     height : 24px;
     outline: none;
 
+}
+
+.terminal-line {
+    font-family: monospace;
+    font-size: 13px;
+    padding: 2px 8px;
+    white-space: pre-wrap;
+    color: rgba(230, 255, 43, 1); /* default — for the > prefix */
+}
+
+.terminal-line.output {
+    color: #cccccc; /* whitish grey for output text */
+}
+
+.terminal-line.input {
+    color: rgba(230, 255, 43, 1); /* yellow-green for input echo */
+}
+
+.terminal-line.error {
+    color: #ff5555;
+}
+
+.terminal-line.cmdclk{
+    color : rgba(184,245,1, 1);
+    cursor : pointer;
+
+}
+
+.terminal-line:hover{
+    color : white;
 }
