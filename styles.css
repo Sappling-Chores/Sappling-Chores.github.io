@@ -53,16 +53,57 @@ body{
     font-weight : 500;
 }
 
+.github-icon{
+    position : absolute;
+    top : 45px;
+    right : 218px;
+    cursor : pointer;
+}
+.github-icon.hovered {
+    animation-name : spin-in;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+}
+
+.github-icon.unhovered{
+    animation-name : spin-out;
+    animation-duration : 0.5s;
+    animation-fill-mode : forwards;
+}
+
+
 #open-terminal-button{
     position : absolute;
     top : 43px;
-    right : 62px;
+    right :100px;
     cursor: pointer;
 }
 
-#open-terminal:hover{
-    fill : white;
+
+#open-terminal-button.hovered {
+    animation-name : spin-in;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
 }
+
+#open-terminal-button.unhovered{
+    animation-name : spin-out;
+    animation-duration : 0.5s;
+    animation-fill-mode : forwards;
+}
+
+
+@keyframes spin-in{
+    0% { transform : rotate(0deg); }
+    50% { scale : 1.2 ; }
+    100% {scale : 1.2; transform : rotate(15deg);}
+}
+
+@keyframes spin-out {
+    0% {scale : 1.2; transform : rotate(15deg)}
+    100% {transform : rotate(0deg) scale(1); }
+}
+
 .introduction-container{
     width : 100%;
     display : flex;
@@ -199,8 +240,8 @@ font-variation-settings:
     position: absolute;
     width : 444px;
     opacity: 0;
-    /* top : 0;
-    left : 0; */
+    top : 0;
+    left : 0;
     pointer-events: none;
 }
 

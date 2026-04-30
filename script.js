@@ -81,6 +81,29 @@ let screenX = 0, screenY = 0, terminalX = 0, terminalY = 0;
 //   sapplingTerminal.style.top = (screen.height/2 - sapplingTerminal.height / 2) + 'px';
 // }
 
+  const githubIcon = document.querySelector('.github-icon');
+  
+  githubIcon.addEventListener('mouseenter', () =>{
+    githubIcon.classList.add('hovered');
+    githubIcon.classList.remove('unhovered');
+  })
+  
+  githubIcon.addEventListener('mouseleave', () => {
+    githubIcon.classList.add('unhovered');
+    githubIcon.classList.remove('hovered');
+  })
+
+
+  openTerminalButton.addEventListener('mouseenter', () =>{
+  openTerminalButton.classList.add('hovered');
+  openTerminalButton.classList.remove('unhovered');
+  })
+  
+  openTerminalButton.addEventListener('mouseleave', () => {
+  openTerminalButton.classList.add('unhovered');
+  openTerminalButton.classList.remove('hovered');
+  })
+  
 function openTerminal() {
   sapplingTerminal.classList.add("active");
 
