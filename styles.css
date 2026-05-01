@@ -92,6 +92,20 @@ body{
     animation-fill-mode : forwards;
 }
 
+#clock{
+    color : white;
+    position : absolute;
+    font-family : "Intel One Mono", monospace;
+    font-size : 32px;
+    top : 43px;
+    right : 300px;
+}
+
+#open-terminal-button.opened{
+    animation-name : spin-in;
+    animation-duration : 0.5s;
+    animation-fill-mode : forwards;
+}
 
 @keyframes spin-in{
     0% { transform : rotate(0deg); }
