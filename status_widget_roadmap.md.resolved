@@ -1,0 +1,224 @@
+# Live Status Widget Roadmap
+
+This guide covers two complete methods to get your current status onto your website.
+1. **Method 1 (The Python Method):** A fully custom pipeline using Python to track your windows and send the data to your website via a GitHub Gist.
+2. **Method 2 (The Discord Method):** The standard integration using Discord Rich Presence and Lanyard.
+
+---
+
+## Part 1: The Python Method (Complete Pipeline)
+
+Because your website is static (hosted on GitHub Pages), it cannot "listen" to your PC directly. The Python script needs to send your status to a free cloud database, and your website will read from that database. We will use a **GitHub Gist** as our free database.
+
+### Step 1: Create the "Database" (GitHub Gist)
+1. Go to [gist.github.com](https://gist.github.com/) while logged into your GitHub account.
+2. Create a new file named `status.json`.
+3. Add this placeholder text: `{"status": "Online"}`
+4. Click **Create secret gist**.
+5. Click the **"Raw"** button on the gist file you just made. Save that URL (it looks like `https://gist.githubusercontent.com/...`). Your website will use this to read your status.
+6. To allow Python to edit this file, go to your GitHub Settings -> Developer Settings -> Personal Access Tokens -> Tokens (classic). Generate a new token with the `gist` scope checked. Save this token!
+
+### Step 2: The Python Script
+This script runs in the background on your PC. It uses `pygetwindow` to see what you are doing, and `requests` to update the GitHub Gist.
+
+**Install the libraries in your terminal:**
+```bash
+pip install pygetwindow requests
+```
+
+**The Script (`status_tracker.py`):**
+```python
+import pygetwindow as gw
+import time
+import requests
+import json
+
+# Your GitHub Gist settings
+GITHUB_TOKEN = "YOUR_PERSONAL_ACCESS_TOKEN"
+GIST_ID = "YOUR_GIST_ID" # It's the string of numbers/letters in your gist URL
+
+def update_gist(status_text):
+    headers = {
+        "Authorization": f"token {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github.v3+json",
+    }
+    data = {
+        "files": {
+            "status.json": {
+                "content": json.dumps({"status": status_text})
+            }
+        }
+    }
+    # Update the gist via GitHub API
+    requests.patch(f"https://api.github.com/gists/{GIST_ID}", headers=headers, json=data)
+
+def monitor_active_window():
+    print("Monitoring active windows... (Press Ctrl+C to stop)")
+    current_window = None
+
+    try:
+        while True:
+            new_window = gw.getActiveWindowTitle()
+            
+            # If the window changed and the title is not empty
+            if new_window != current_window and new_window:
+                current_window = new_window
+                
+                # Filter what gets sent to your website
+                if "Fusion 360" in current_window:
+                    status_text = "Designing in Fusion 360"
+                    print(f"Updating website to: {status_text}")
+                    update_gist(status_text)
+                    
+                elif "YouTube" in current_window:
+                    status_text = "Watching YouTube"
+                    print(f"Updating website to: {status_text}")
+                    update_gist(status_text)
+                    
+                elif "Code" in current_window or "Cursor" in current_window:
+                    status_text = "Coding..."
+                    print(f"Updating website to: {status_text}")
+                    update_gist(status_text)
+            
+            time.sleep(3) # Wait 3 seconds before checking again
+            
+    except KeyboardInterrupt:
+        # Revert status when you stop the script
+        update_gist("Offline")
+        print("\nMonitoring stopped.")
+
+if __name__ == "__main__":
+    monitor_active_window()
+```
+
+### Step 3: The Website Code
+Now, we add JavaScript to your website to read from the "Raw" Gist URL you saved in Step 1.
+
+**In your `script.js`:**
+```javascript
+const GIST_RAW_URL = "YOUR_RAW_GIST_URL_HERE";
+
+async function fetchPythonStatus() {
+    try {
+        // We add a timestamp to the URL to prevent the browser from caching old data
+        const response = await fetch(`${GIST_RAW_URL}?t=${new Date().getTime()}`);
+        const data = await response.json();
+        
+        document.getElementById('status-widget').innerHTML = `<p>💻 Current Status: <b>${data.status}</b></p>`;
+    } catch (error) {
+        console.error("Error fetching status:", error);
+    }
+}
+
+fetchPythonStatus();
+setInterval(fetchPythonStatus, 15000); // Check for updates every 15 seconds
+```
+
+---
+
+## Part 2: The Discord + Lanyard Method
+
+This method bypasses Python entirely and uses Discord's built-in activity tracking.
+
+### Step 1: Configure Discord (No Code)
+1. Open Discord on your PC.
+2. Go to **User Settings** (the gear icon) -> **Activity Privacy**.
+3. Ensure **"Display current activity as a status message"** is turned ON.
+4. Go to **Registered Games**. 
+    * If you are using Fusion 360 (or any other software) and Discord doesn't see it, click **"Add it!"** and select Fusion 360 from the dropdown menu. Now Discord will show you as "Playing Fusion 360".
+5. For **Spotify**, go to **Connections** in Discord settings and link your Spotify account. Ensure "Display on profile" is checked.
+
+### Step 2: Connect to Lanyard API
+Lanyard is the bridge between Discord and your website.
+1. Join the Lanyard Discord server (this is how you authenticate your account): [Join Lanyard](https://discord.gg/lanyard)
+2. Once you join, Lanyard automatically starts tracking your public Discord status. 
+
+### Step 3: Getting Your Discord ID
+To fetch your data, you need your unique 18-digit Discord User ID.
+1. In Discord, go to **Advanced Settings** and turn on **Developer Mode**.
+2. Right-click your profile picture in the bottom left of Discord and click **Copy User ID**.
+3. Save this ID.
+
+### Step 4: The Website Code (JavaScript & HTML)
+Now we add the code to your GitHub Pages website.
+
+**1. In your `index.html`:**
+```html
+<div id="status-widget" class="status-widget">
+    <p>Loading status...</p>
+</div>
+```
+
+**2. In your `script.js`:**
+```javascript
+const DISCORD_USER_ID = "YOUR_18_DIGIT_ID_HERE"; 
+
+async function fetchDiscordStatus() {
+    try {
+        const response = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_USER_ID}`);
+        const data = await response.json();
+        
+        if (data.success) {
+            updateStatusWidget(data.data);
+        }
+    } catch (error) {
+        console.error("Error fetching status:", error);
+    }
+}
+
+function updateStatusWidget(discordData) {
+    const widget = document.getElementById('status-widget');
+    
+    // Check if you are listening to Spotify
+    if (discordData.listening_to_spotify) {
+        const song = discordData.spotify.song;
+        const artist = discordData.spotify.artist;
+        widget.innerHTML = `<p>🎵 Listening to: <b>${song}</b> by ${artist}</p>`;
+        return;
+    }
+    
+    // Check if you are using software/playing a game (like Fusion 360)
+    if (discordData.activities.length > 0) {
+        // activities[0] is usually the primary game/software
+        const activity = discordData.activities[0].name;
+        widget.innerHTML = `<p>💻 Currently using: <b>${activity}</b></p>`;
+        return;
+    }
+    
+    // Fallback if you are online but not doing anything specific
+    widget.innerHTML = `<p>🟢 Online, but currently chilling.</p>`;
+}
+
+fetchDiscordStatus();
+setInterval(fetchDiscordStatus, 10000);
+```
+
+---
+
+## Session Commands Summary
+
+Here is a summary of the commands and steps we used to set this up on your Windows PC:
+
+### 1. Running the Python Script
+Because the script ends in `.pyw` (Python Windowless), it is designed to run invisibly in the background.
+- **To test in VS Code:** Open the VS Code terminal and run `C:\Python314\python.exe status_report.pyw`. (Make sure your VS Code Python Interpreter is set to `C:\Python314\python.exe` and not `pythonw.exe`).
+- **To run in the background (No VS Code needed):** Simply navigate to your folder in Windows File Explorer and **double-click** `status_report.pyw`. It will launch silently and run in the background even after you close File Explorer.
+- **To stop the background script:** Open Windows Task Manager (`Ctrl + Shift + Esc`), find `pythonw.exe` in your Background Processes list, click it, and select "End Task".
+
+### 2. Git Commands for the Website
+You only need to run these commands when you modify the code for your website (`.html`, `.css`, `.js`). You do *not* need to run these to update your status.
+```bash
+git add .
+git commit -m "Add live status widget"
+git push
+```
+
+### 3. Ignoring Local Files
+We updated your `.gitignore` file so that your local testing files and Python script don't accidentally get uploaded to GitHub Pages:
+```text
+.env
+status_report.pyw
+test.py
+example_codes/
+status_issue_summary.md
+```

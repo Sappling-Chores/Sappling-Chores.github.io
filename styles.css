@@ -26,17 +26,9 @@ a:visited {
 body{
     background: transparent;
     padding-bottom: 64px;
+    background: rgba(22, 22, 22, 1)
 }
 
-#tsparticles {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    background: rgba(22, 22, 22, 1);
-}
 
 .header{
     position: relative;
@@ -53,16 +45,77 @@ body{
     font-weight : 500;
 }
 
+#status-widget{
+    position : absolute;
+    top : 105px;
+    left : 10rem;
+    font-family : "Intel One Mono", monospace;
+    font-size : 24px;
+}
+
+#status-widget.code{
+    color : rgb(173, 255, 47);
+}
+#clock{
+    color : white;
+    position : absolute;
+    font-family : "Intel One Mono", monospace;
+    font-size : 32px;
+    top : 43px;
+    right : 500px;
+}
+
+#about-icon {
+    position : absolute;
+    top : 45px;
+    right: 415px;
+    cursor : pointer;
+}
+
+#about-icon.hovered{
+    animation-name : spin-in;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+    fill : #E6FF2B;
+}
+
+#about-icon.unhovered{
+    animation-name : spin-out;
+    animation-duration : 0.5s;
+    animation-fill-mode : forwards;   
+}
+
+#project-icon {
+    position : absolute;
+    top : 45px;
+    right: 345px;
+    cursor : pointer;
+}
+
+#project-icon.hovered{
+    animation-name : spin-in;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+    fill : #E6FF2B;
+}
+
+#project-icon.unhovered{
+    animation-name : spin-out;
+    animation-duration : 0.5s;
+    animation-fill-mode : forwards;   
+}
+
 .github-icon{
     position : absolute;
     top : 45px;
-    right : 218px;
+    right : 200px;
     cursor : pointer;
 }
 .github-icon.hovered {
     animation-name : spin-in;
     animation-duration: 0.5s;
     animation-fill-mode: forwards;
+    fill : #E6FF2B;
 }
 
 .github-icon.unhovered{
@@ -71,6 +124,25 @@ body{
     animation-fill-mode : forwards;
 }
 
+#mail-svg{
+    position : absolute;
+    top : 45px;
+    right : 270px;
+    cursor : pointer;
+}
+
+#mail-svg.hovered{
+    animation-name : spin-in;
+    animation-duration : 0.5s;
+    animation-fill-mode : forwards;
+    fill : #E6FF2B;
+}
+
+#mail-svg.unhovered{
+    animation-name : spin-out;
+    animation-duration : 0.5s;
+    animation-fill-mode : forwards;
+}
 
 #open-terminal-button{
     position : absolute;
@@ -92,14 +164,6 @@ body{
     animation-fill-mode : forwards;
 }
 
-#clock{
-    color : white;
-    position : absolute;
-    font-family : "Intel One Mono", monospace;
-    font-size : 32px;
-    top : 43px;
-    right : 300px;
-}
 
 #open-terminal-button.opened{
     animation-name : spin-in;
@@ -166,7 +230,7 @@ body{
     color : rgba(230, 255, 43, 1);
 }
 
-.contact-container{
+.rntask-container{
     position : relative;
     margin-top : 2rem;
     padding-top : 3rem;
@@ -176,7 +240,7 @@ body{
     flex-direction: column;
 }
 
-.contact-container::before {
+.rntask-container::before {
   content: "";
   position: absolute;
   top: 0;              /* position */
@@ -186,7 +250,7 @@ body{
   background: linear-gradient(90deg, white, white);
 }
 
-.contact-container::after{
+.rntask-container::after{
     content : "";
     position : absolute;
     bottom : 0;
@@ -196,14 +260,14 @@ body{
     background  : linear-gradient(90deg, white, white);
 }
 
-#Contact{
+#rnTaskLabel{
     font-family: "Annie Use Your Telescope";
     font-size: 36px;
     color : rgba(230, 255, 43, 1);
 }
 
-#contact-detail{
-margin-top : 6px;
+li{
+margin-top : 10px;
 margin-left : 2.5625rem;
 font-family: "Recursive", sans-serif;
 font-size: 20px;
@@ -219,6 +283,24 @@ font-variation-settings:
     "MONO" 1;
 }
 
+footer{
+    padding: 4rem;
+    display : flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.contact-label {
+    color : white;
+}
+
+#contact-logos{
+    padding : 24px;
+    display: flex;
+    justify-content: center;
+    gap : 16px;
+}
 .navigation-container{
     position : relative;
     margin-top : 2rem;
