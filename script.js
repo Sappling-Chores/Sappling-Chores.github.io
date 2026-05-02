@@ -196,43 +196,51 @@ async function fetchPythonStatus() {
     const data = await response.json();
 
 
-    const statusList = ["Code", "Fusion-360", "KiCad", "Chrome", "Offline", "Watching YouTube"];
+    const statusList = ["Code", "Fusion-360", "KiCad", "Chrome", "Offline", "YouTube", "Study", "Music"];
 
     let status_live = data.status;
-    let show_status_val = "🟢 Online, but chilling."; // Default fallback
+    let show_status_val = "Online 🟢"; // Default fallback
     const statusWidget = document.getElementById("status-widget");
 
     switch (status_live) {
       case statusList[0]:
-        show_status_val = "🟢 Yo I am working!! 💻";
+        show_status_val = "working!! 💻";
         statusWidget.style.color = "rgb(173, 255, 47)";
         break;
 
       case statusList[1]:
-        show_status_val = "🟢 Man its cad time! 🗿";
+        show_status_val = "cad time! 🗿";
         statusWidget.style.color = "rgb(255, 165, 0)";
         break;
 
 
       case statusList[2]:
-        show_status_val = "🟢 Wiring things up! ⚡";
+        show_status_val = "Wires⚡";
         statusWidget.style.color = "rgb(144,213,255)";
         break;
 
       case statusList[3]:
-        show_status_val = "🟢 Yum Yum Yum 🥳";
-        statusWidget.style.color = "rgb(173, 255, 47)"; // For regular Chrome
+        show_status_val = "Chrome 🥳";
+        statusWidget.style.color = "rgb(255, 255, 0)"; 
         break;
 
       case statusList[4]:
-        show_status_val = "🔴 Currently Offline 💤";
-        statusWidget.style.color = "rgb(173, 255, 47)";
+        show_status_val = "Sleeping 💤";
+        statusWidget.style.color = "#FFC0CB";
         break;
         
       case statusList[5]:
-        show_status_val = "Watching some videos! 🍿";
-        statusWidget.style.color = "rgb(173, 255, 47)"; 
+        show_status_val = "Youtube 🍿";
+        statusWidget.style.color = "rgb(255, 0, 0)"; 
         break;
+
+      case statusList[6]:
+        show_status_val = "Studying 😭"
+        statusWidget.style.color = "blue";
+      
+      case statusList[7]:
+        show_status_val = "La La La 🎶"
+        statusWidget.style.color = "#DAB1DA"
     }
 
     document.getElementById('status-widget').innerHTML = `<p>${show_status_val}</p>`;
