@@ -1,6 +1,6 @@
 * {
-    margin : 0;
-    padding : 0;
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
@@ -12,332 +12,314 @@
     box-sizing: border-box;
 }
 
-a{
-    color : rgba(255, 255, 255, 1);
+a {
+    color: rgba(255, 255, 255, 1);
+    text-decoration: none;
 }
 
-a:hover{
-    color : rgba(230, 255, 43, 1);
+a:hover {
+    color: rgba(230, 255, 43, 1);
 }
 
 a:visited {
-    color : rgba(255, 255, 255 , 1);
+    color: rgba(255, 255, 255, 1);
 }
-body{
+
+body {
     background: transparent;
     padding-bottom: 64px;
     background: rgba(22, 22, 22, 1)
 }
 
 
-.header{
+.header {
+    display: flex;
     position: relative;
-    width : 100%;
+    width: 100%;
 }
 
-.rightanglebracket{
+.rightanglebracket {
     display: inline-block;
-    padding-top : 5.3125rem;
-    padding-left : 5.375rem;
-    color : rgba(255, 255, 255, 1);
-    font-family : "Roboto", sans-serif;
-    font-size : 64px;
-    font-weight : 500;
+    padding-top: 5.3125rem;
+    padding-left: 5.375rem;
+    color: rgba(255, 255, 255, 1);
+    font-family: "Roboto", sans-serif;
+    font-size: 64px;
+    font-weight: 500;
 }
 
-#status-widget{
-    position : absolute;
-    top : 105px;
-    left : 10rem;
-    font-family : "Intel One Mono", monospace;
-    font-size : 24px;
+.navigation-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-top: 1.5rem;
+
 }
 
-#status-widget.code{
-    color : rgb(173, 255, 47);
-}
-#clock{
-    color : white;
-    position : absolute;
-    font-family : "Intel One Mono", monospace;
-    font-size : 32px;
-    top : 43px;
-    right : 500px;
+.navigation-list {
+    display: flex;
+    justify-content: center;
+    gap: 2.5625rem;
+    top: 45px;
 }
 
-#about-icon {
-    position : absolute;
-    top : 45px;
-    right: 415px;
-    cursor : pointer;
+.Home-Container{
+    border-bottom : solid 2px white;
+
+}
+.navigation {
+    display: flex;
+    list-style: none;
+    margin-left: 0;
 }
 
-#about-icon.hovered{
-    animation-name : spin-in;
-    animation-duration: 0.5s;
-    animation-fill-mode: forwards;
-    fill : #E6FF2B;
+#status-label {
+    position: absolute;
+    top: 9rem;
+    right: 19.5rem;
+    color: white;
+    font-family: "Intel One Mono";
+    font-size: 20px;
 }
 
-#about-icon.unhovered{
-    animation-name : spin-out;
-    animation-duration : 0.5s;
-    animation-fill-mode : forwards;   
+#status-widget {
+    position: absolute;
+    top: 9rem;
+    right: 10rem;
+    font-family: "Intel One Mono", monospace;
+    font-size: 20px;
 }
 
-#project-icon {
-    position : absolute;
-    top : 45px;
-    right: 345px;
-    cursor : pointer;
+#status-widget.code {
+    color: rgb(173, 255, 47);
 }
 
-#project-icon.hovered{
-    animation-name : spin-in;
-    animation-duration: 0.5s;
-    animation-fill-mode: forwards;
-    fill : #E6FF2B;
+#clock {
+    color: #BEBEBE;
+    position: absolute;
+    font-family: "Intel One Mono", monospace;
+    font-size: 20px;
+    top: 11rem;
+    right: 10rem;
 }
 
-#project-icon.unhovered{
-    animation-name : spin-out;
-    animation-duration : 0.5s;
-    animation-fill-mode : forwards;   
+
+
+.github-icon {
+    position: absolute;
+    top: 45px;
+    right: 200px;
+    cursor: pointer;
 }
 
-.github-icon{
-    position : absolute;
-    top : 45px;
-    right : 200px;
-    cursor : pointer;
-}
 .github-icon.hovered {
-    animation-name : spin-in;
+    animation-name: spin-in;
     animation-duration: 0.5s;
     animation-fill-mode: forwards;
-    fill : #E6FF2B;
+    fill: #E6FF2B;
 }
 
-.github-icon.unhovered{
-    animation-name : spin-out;
-    animation-duration : 0.5s;
-    animation-fill-mode : forwards;
+.github-icon.unhovered {
+    animation-name: spin-out;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
 }
 
-#mail-svg{
-    position : absolute;
-    top : 45px;
-    right : 270px;
-    cursor : pointer;
-}
 
-#mail-svg.hovered{
-    animation-name : spin-in;
-    animation-duration : 0.5s;
-    animation-fill-mode : forwards;
-    fill : #E6FF2B;
-}
 
-#mail-svg.unhovered{
-    animation-name : spin-out;
-    animation-duration : 0.5s;
-    animation-fill-mode : forwards;
-}
-
-#open-terminal-button{
-    position : absolute;
-    top : 43px;
-    right :100px;
+#open-terminal-button {
+    position: absolute;
+    top: 43px;
+    right: 100px;
     cursor: pointer;
 }
 
 
 #open-terminal-button.hovered {
-    animation-name : spin-in;
+    animation-name: spin-in;
     animation-duration: 0.5s;
     animation-fill-mode: forwards;
 }
 
-#open-terminal-button.unhovered{
-    animation-name : spin-out;
-    animation-duration : 0.5s;
-    animation-fill-mode : forwards;
+#open-terminal-button.unhovered {
+    animation-name: spin-out;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
 }
 
 
-#open-terminal-button.opened{
-    animation-name : spin-in;
-    animation-duration : 0.5s;
-    animation-fill-mode : forwards;
+#open-terminal-button.opened {
+    animation-name: spin-in;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
 }
 
-@keyframes spin-in{
-    0% { transform : rotate(0deg); }
-    50% { scale : 1.2 ; }
-    100% {scale : 1.2; transform : rotate(15deg);}
+@keyframes spin-in {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        scale: 1.2;
+    }
+
+    100% {
+        scale: 1.2;
+        transform: rotate(15deg);
+    }
 }
 
 @keyframes spin-out {
-    0% {scale : 1.2; transform : rotate(15deg)}
-    100% {transform : rotate(0deg) scale(1); }
+    0% {
+        scale: 1.2;
+        transform: rotate(15deg)
+    }
+
+    100% {
+        transform: rotate(0deg) scale(1);
+    }
 }
 
-.introduction-container{
-    width : 100%;
-    display : flex;
-    height : 15.3125rem;
-    
-}
-
-.name-container{
-    display : flex;
-    padding-top : 1.1rem;
-    width : 36.8125rem;
-    padding-left : 7.8125rem;
-}
-
-#Name{
-    align-self: top;
-    color : rgba(230, 255, 43, 1);
-    font-family : "Annie Use Your Telescope";
-    font-size : 128px;
-}
-.detail-container{
-    width: 58.375rem;
-    display : flex;
-    padding-left : 1.875rem;
+.introduction-container {
+    width: 100%;
     display: flex;
-    padding-top : 2.7125rem;
+    height: 15.3125rem;
+
+}
+
+.name-container {
+    display: flex;
+    padding-top: 1.1rem;
+    width: 36.8125rem;
+    padding-left: 7.8125rem;
+}
+
+#Name {
+    align-self: top;
+    color: rgba(230, 255, 43, 1);
+    font-family: "Annie Use Your Telescope";
+    font-size: 128px;
+}
+
+.detail-container {
+    width: 58.375rem;
+    display: flex;
+    padding-left: 1.875rem;
+    display: flex;
+    padding-top: 2.7125rem;
 }
 
 
-#detail{
-  font-family: "Recursive", sans-serif;
-  font-size: 24px;
-  color : white;
-  letter-spacing: 2px;
-  font-optical-sizing: auto;
-  font-weight: 500;
-  font-style: normal;
-  font-variation-settings:
-    "slnt" 0,
-    "CASL" 1,
-    "CRSV" 0.5,
-    "MONO" 1;
+#detail {
+    font-family: "Recursive", sans-serif;
+    font-size: 24px;
+    color: white;
+    letter-spacing: 2px;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    font-variation-settings:
+        "slnt" 0,
+        "CASL" 1,
+        "CRSV" 0.5,
+        "MONO" 1;
 }
 
-.highlighted-text{
-    color : rgba(230, 255, 43, 1);
+.highlighted-text {
+    color: rgba(230, 255, 43, 1);
 }
 
-.rntask-container{
-    position : relative;
-    margin-top : 2rem;
-    padding-top : 3rem;
-    padding-bottom : 2.25rem;
-    padding-left : 7.1875rem;
-    display : flex;
+.rntask-container {
+    position: relative;
+    margin-top: 2rem;
+    padding-top: 3rem;
+    padding-bottom: 2.25rem;
+    padding-left: 7.1875rem;
+    display: flex;
     flex-direction: column;
 }
 
 .rntask-container::before {
-  content: "";
-  position: absolute;
-  top: 0;              /* position */
-  left: 8rem;          /* start point */
-  width: 40rem;         /* length of line */
-  height: .0625rem;         /* thickness */
-  background: linear-gradient(90deg, white, white);
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 8rem;
+    width: 40rem;
+    height: .0625rem;
+    background: linear-gradient(90deg, white, white);
 }
 
-.rntask-container::after{
-    content : "";
-    position : absolute;
-    bottom : 0;
-    right : 6rem;
-    width : 30rem;
-    height : 0.0625rem;
-    background  : linear-gradient(90deg, white, white);
+.rntask-container::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 6rem;
+    width: 30rem;
+    height: 0.0625rem;
+    background: linear-gradient(90deg, white, white);
 }
 
-#rnTaskLabel{
+#rnTaskLabel {
     font-family: "Annie Use Your Telescope";
     font-size: 36px;
-    color : rgba(230, 255, 43, 1);
+    color: rgba(230, 255, 43, 1);
 }
 
-li{
-margin-top : 10px;
-margin-left : 2.5625rem;
-font-family: "Recursive", sans-serif;
-font-size: 20px;
-color : white;
-letter-spacing: 2px;
-font-optical-sizing: auto;
-font-weight: 400;
-font-style: normal;
-font-variation-settings:
-    "slnt" 0,
-    "CASL" 1,
-    "CRSV" 0.5,
-    "MONO" 1;
+li {
+    margin-top: 10px;
+    margin-left: 2.5625rem;
+    font-family: "Recursive", sans-serif;
+    font-size: 20px;
+    color: white;
+    letter-spacing: 2px;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings:
+        "slnt" 0,
+        "CASL" 1,
+        "CRSV" 0.5,
+        "MONO" 1;
 }
 
-footer{
+footer {
     padding: 4rem;
-    display : flex;
+    display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
 }
 
 .contact-label {
-    color : white;
+    color: white;
 }
 
-#contact-logos{
-    padding : 24px;
+#contact-logos {
+    padding: 24px;
     display: flex;
     justify-content: center;
-    gap : 16px;
-}
-.navigation-container{
-    position : relative;
-    margin-top : 2rem;
-    padding-top : 3rem;
-    padding-bottom : 2.25rem;
-    padding-left : 7.1875rem;
-    display : flex;
-    flex-direction: column;
+    gap: 16px;
+    align-items: center;
 }
 
-.navigation-label{
-    font-family: "Annie Use Your Telescope";
-    font-size: 36px;
-    color : rgba(230, 255, 43, 1);
+.contact-logo {
+    cursor: pointer;
+    transition: transform 0.2s ease, fill 0.2s ease;
 }
 
-#navigation {
-    text-decoration: none;
-    color : white;
-    margin-top : 1rem;
-    border : none;
-    width : 72.5rem;
-    height : 12.5rem;
-    background: rgba(0, 0, 0, 1);
-    margin-left : 2.5625rem;
+.contact-logo:hover {
+    fill: #E6FF2B;
+    transform: scale(1.2);
 }
 
-#navigation:focus{
-    outline : none;
-}
 
-#terminal-container{
+
+#terminal-container {
     position: absolute;
-    width : 444px;
+    width: 444px;
     opacity: 0;
-    top : 0;
-    left : 0;
+    top: 0;
+    left: 0;
     pointer-events: none;
 }
 
@@ -346,85 +328,88 @@ footer{
     pointer-events: auto;
 }
 
-#terminal-top-container{
+#terminal-top-container {
     position: relative;
-    display : flex;
-    width : 444px;
-    height : 38px;
-    background : white;
-    border : solid 2 white;
+    display: flex;
+    width: 444px;
+    height: 38px;
+    background: white;
+    border: solid 2 white;
 }
 
-.terminal-logo-detail{
+.terminal-logo-detail {
     position: absolute;
-    top : 0;
-    left : 0;
-}
-.terminal-logo{
-    position : absolute;
-    top : 9px;
-    left : 4px;
-}
-.terminal-logo-label{
-    position: absolute;
-    top : 10px;
-    left : 43px;
-    font-family : "Intel One Mono";
-    font-size : 16px;
-    font-weight : bold;
+    top: 0;
+    left: 0;
 }
 
-.X-container{
-    position:absolute;
-    height : 100%;
+.terminal-logo {
+    position: absolute;
+    top: 9px;
+    left: 4px;
+}
+
+.terminal-logo-label {
+    position: absolute;
+    top: 10px;
+    left: 43px;
+    font-family: "Intel One Mono";
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.X-container {
+    position: absolute;
+    height: 100%;
     display: flex;
     align-items: center;
-    right : 0;
-    padding-right : 24px;
+    right: 0;
+    padding-right: 24px;
     cursor: pointer;
 
 }
 
-#X{
-    font-family : "Roboto";
-    font-size : 24px;
-    font-weight : bold;
+#X {
+    font-family: "Roboto";
+    font-size: 24px;
+    font-weight: bold;
 }
 
-#terminal-output{
-    width : 444px;
-    height : 282px;
+#terminal-output {
+    width: 444px;
+    height: 282px;
     background: black;
-    border-left : solid 2px white;
-    border-right : solid 2px white;
-    border-top : none;
-    border-bottom : none;
+    border-left: solid 2px white;
+    border-right: solid 2px white;
+    border-top: none;
+    border-bottom: none;
     word-break: break-all;
     overflow-y: auto;
     overflow-x: auto;
 
 }
 
-.command-start-arrow{
+.command-start-arrow {
     display: inline-block;
-    width : 1rem;
-    height : 1.5rem;
-    border-left : solid 2px white;
-    border-top : none;
+    width: 1rem;
+    height: 1.5rem;
+    border-left: solid 2px white;
+    border-top: none;
     border-bottom: solid 2px white;
 
 }
-#command{
+
+#command {
     display: inline-block;
-    width : 100%;
-    height : 24px;
+    width: 100%;
+    height: 24px;
     background: black;
     outline: none;
-    border-top : none;
-    border-left : solid 2px white;
-    border-right : solid 2px white;
-    border-bottom : solid 2px white;
-    color : white;
+    border-top: none;
+    border-left: solid 2px white;
+    border-right: solid 2px white;
+    border-bottom: solid 2px white;
+    color: white;
 
     font-family: "Intel One Mono", monospace;
     font-size: 16px;
@@ -435,8 +420,8 @@ footer{
 }
 
 #command:focus {
-    width : 444px;
-    height : 24px;
+    width: 444px;
+    height: 24px;
     outline: none;
 
 }
@@ -446,27 +431,30 @@ footer{
     font-size: 13px;
     padding: 2px 8px;
     white-space: pre-wrap;
-    color: rgba(230, 255, 43, 1); /* default — for the > prefix */
+    color: rgba(230, 255, 43, 1);
+   
 }
 
 .terminal-line.output {
-    color: #cccccc; /* whitish grey for output text */
+    color: #cccccc;
+    
 }
 
 .terminal-line.input {
-    color: rgba(230, 255, 43, 1); /* yellow-green for input echo */
+    color: rgba(230, 255, 43, 1);
+  
 }
 
 .terminal-line.error {
     color: #ff5555;
 }
 
-.terminal-line.cmdclk{
-    color : rgba(184,245,1, 1);
-    cursor : pointer;
+.terminal-line.cmdclk {
+    color: rgba(184, 245, 1, 1);
+    cursor: pointer;
 
 }
 
-.terminal-line:hover{
-    color : white;
+.terminal-line:hover {
+    color: white;
 }

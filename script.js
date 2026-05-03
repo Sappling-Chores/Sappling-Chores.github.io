@@ -6,11 +6,8 @@ const terminalTop = document.getElementById("terminal-top-container");
 const terminalOutput = document.getElementById("terminal-output");
 const Command = document.getElementById("command")
 
-let isDragging = false;
-
 let offsetX = 0;
 let offsetY = 0;
-let screenX = 0, screenY = 0, terminalX = 0, terminalY = 0;
 
 
 const githubIcon = document.querySelector('.github-icon');
@@ -25,42 +22,7 @@ githubIcon.addEventListener('mouseleave', () => {
   githubIcon.classList.remove('hovered');
 })
 
-const mailSVG = document.getElementById("mail-svg");
 
-mailSVG.addEventListener("mouseenter", () => {
-  mailSVG.classList.add("hovered");
-  mailSVG.classList.remove("unhovered");
-})
-
-mailSVG.addEventListener("mouseleave", () => {
-  mailSVG.classList.add("unhovered");
-  mailSVG.classList.remove("hovered");
-})
-
-
-const projectIcon = document.getElementById("project-icon");
-
-projectIcon.addEventListener("mouseenter", () => {
-  projectIcon.classList.add("hovered");
-  projectIcon.classList.remove("unhovered");
-})
-
-projectIcon.addEventListener("mouseleave", () => {
-  projectIcon.classList.add("unhovered");
-  projectIcon.classList.remove("hovered");
-})
-
-const aboutIcon = document.getElementById("about-icon");
-
-aboutIcon.addEventListener("mouseenter", () => {
-  aboutIcon.classList.add("hovered");
-  aboutIcon.classList.remove("unhovered");
-})
-
-aboutIcon.addEventListener("mouseleave", () => {
-  aboutIcon.classList.add("unhovered");
-  aboutIcon.classList.remove("hovered");
-})
 
 openTerminalButton.addEventListener('mouseenter', () => {
   openTerminalButton.classList.add('hovered');
@@ -71,6 +33,7 @@ openTerminalButton.addEventListener('mouseleave', () => {
   openTerminalButton.classList.add('unhovered');
   openTerminalButton.classList.remove('hovered');
 })
+
 
 function openTerminal() {
   sapplingTerminal.classList.add("active");
@@ -199,7 +162,7 @@ async function fetchPythonStatus() {
     const statusList = ["Code", "Fusion-360", "KiCad", "Chrome", "Offline", "YouTube", "Study", "Music"];
 
     let status_live = data.status;
-    let show_status_val = "Online 🟢"; // Default fallback
+    let show_status_val = "Online 🟢";
     const statusWidget = document.getElementById("status-widget");
 
     switch (status_live) {
@@ -221,26 +184,28 @@ async function fetchPythonStatus() {
 
       case statusList[3]:
         show_status_val = "Chrome 🥳";
-        statusWidget.style.color = "rgb(255, 255, 0)"; 
+        statusWidget.style.color = "rgb(255, 255, 0)";
         break;
 
       case statusList[4]:
         show_status_val = "Sleeping 💤";
         statusWidget.style.color = "#FFC0CB";
         break;
-        
+
       case statusList[5]:
         show_status_val = "Youtube 🍿";
-        statusWidget.style.color = "rgb(255, 0, 0)"; 
+        statusWidget.style.color = "rgb(255, 0, 0)";
         break;
 
       case statusList[6]:
         show_status_val = "Studying 😭"
         statusWidget.style.color = "blue";
-      
+        break;
+
       case statusList[7]:
         show_status_val = "La La La 🎶"
         statusWidget.style.color = "#DAB1DA"
+        break;
     }
 
     document.getElementById('status-widget').innerHTML = `<p>${show_status_val}</p>`;

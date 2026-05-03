@@ -78,21 +78,19 @@ def monitor_active_window():
                     update_gist(status_text)
                     print(current_window) 
                     
+                elif "Physics Wallah" in current_window : 
+                    status_text = "Study"
+                    print(f"Updating status to: {status_text}")
+                    update_gist(status_text)
+                    print(current_window)
+                     
                 elif "Chrome" in current_window and not "YouTube" in current_window: 
                     status_text = "Chrome"
                     print(f"Updating status to {status_text}")
                     update_gist(status_text)
                     print(current_window)
                     
-                
-                elif "Physics Wallah" in current_window : 
-                    status_text = "Study"
-                    print(f"Updating status to: {status_text}")
-                    update_gist(status_text)
-                    print(current_window)
-                    
-
-            time.sleep(3) 
+            time.sleep(15) 
             
     except KeyboardInterrupt:
 
