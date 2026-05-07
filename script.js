@@ -162,6 +162,7 @@ async function fetchPythonStatus() {
     const statusList = ["Code", "Fusion-360", "KiCad", "Chrome", "Offline", "YouTube", "Study", "Music"];
 
     let status_live = data.status;
+    let music_artist = data.musicArtist;
     let show_status_val = "Online 🟢";
     const statusWidget = document.getElementById("status-widget");
 
@@ -203,7 +204,7 @@ async function fetchPythonStatus() {
         break;
 
       case statusList[7]:
-        show_status_val = "La La La 🎶"
+        show_status_val = `Listening to '${music_artist}'`;
         statusWidget.style.color = "#DAB1DA"
         break;
     }

@@ -5,16 +5,21 @@ import json
 import time
 import keyboard
 import os
-
+import numpy as np
 import sys
+
 sys.stdout.reconfigure(encoding='utf-8')
 
+print(np.__version__)
 load_dotenv()
+
+print(os.name)
+print(gw.__version__)
 
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 GIST_ID = os.getenv("GIST_ID")
 
-def update_gist(status_text):
+def update_gist(status_text, music_artist=""):
     headers = {
         "Authorization": f"token {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json",
@@ -22,7 +27,8 @@ def update_gist(status_text):
     data = {
         "files": {
             "status.json": {
-                "content": json.dumps({"status": status_text})
+                "content": json.dumps({"status": status_text, "musicArtist":music_artist})
+                
             }
         }
     }
@@ -30,7 +36,7 @@ def update_gist(status_text):
     requests.patch(f"https://api.github.com/gists/{GIST_ID}", headers=headers, json=data)
 def monitor_active_window():
     print("Monitoring active windows... (Press Ctrl+Shift+Q to stop silently from anywhere)")
-    musicArtist = ["JENNIE", "BIBI", "KATSEYE", "BLACKPINK", "ROSE", "LISA", "ILLIT", "BTS", "Sabrina Carpenter", "Billie Eilish", "Olivia Rodrigo", "Taylor Swift", "xooos" ]
+    musicArtist = ["JENNIE", "BIBI", "KATSEYE", "BLACKPINK", "ROSE", "ROSÉ", "LISA", "ILLIT", "BTS", "Sabrina Carpenter", "Billie Eilish", "Olivia Rodrigo", "Taylor Swift", "xooos", "BABYMONSTER" ]
     current_window = None
     try:
         while True:
@@ -74,11 +80,14 @@ def monitor_active_window():
                     
                 elif any(artist in current_window for artist in musicArtist):
                     status_text = "Music"
+                    common = [artist for artist in musicArtist if artist in current_window]
+                    artist_name = ", ".join(common)
+                    print(artist_name)
                     print(f"Updating status to: {status_text}")
-                    update_gist(status_text)
-                    print(current_window) 
+                    update_gist(status_text, artist_name)
+                     
                     
-                elif "Physics Wallah" in current_window : 
+                elif "Physics Wallah" in current_window or "PW Video Player" in current_window: 
                     status_text = "Study"
                     print(f"Updating status to: {status_text}")
                     update_gist(status_text)

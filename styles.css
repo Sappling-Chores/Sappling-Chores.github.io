@@ -28,7 +28,7 @@ a:visited {
 body {
     background: transparent;
     padding-bottom: 64px;
-    background: rgba(22, 22, 22, 1)
+    background: rgb(6, 53, 62);
 }
 
 
@@ -40,8 +40,8 @@ body {
 
 .rightanglebracket {
     display: inline-block;
-    padding-top: 5.3125rem;
-    padding-left: 5.375rem;
+    padding-top: 4rem;
+    padding-left: 4rem;
     color: rgba(255, 255, 255, 1);
     font-family: "Roboto", sans-serif;
     font-size: 64px;
@@ -73,19 +73,19 @@ body {
     margin-left: 0;
 }
 
-#status-label {
+.status-container{
     position: absolute;
-    top: 9rem;
-    right: 19.5rem;
+    display: flex;
+    top: 325px;
+    left: 7.8125rem;
+}
+#status-label {
     color: white;
     font-family: "Intel One Mono";
     font-size: 20px;
 }
 
 #status-widget {
-    position: absolute;
-    top: 9rem;
-    right: 10rem;
     font-family: "Intel One Mono", monospace;
     font-size: 20px;
 }
@@ -99,15 +99,15 @@ body {
     position: absolute;
     font-family: "Intel One Mono", monospace;
     font-size: 20px;
-    top: 11rem;
-    right: 10rem;
+    top: 1.5rem;
+    right: 6.25rem;
 }
 
 
 
 .github-icon {
     position: absolute;
-    top: 45px;
+    top: 4rem;
     right: 200px;
     cursor: pointer;
 }
@@ -129,7 +129,7 @@ body {
 
 #open-terminal-button {
     position: absolute;
-    top: 43px;
+    top: 4rem;
     right: 100px;
     cursor: pointer;
 }
@@ -197,16 +197,16 @@ body {
 #Name {
     align-self: top;
     color: rgba(230, 255, 43, 1);
-    font-family: "Annie Use Your Telescope";
-    font-size: 128px;
+    font-family: "Intel One Mono";
+    font-size: 96px;
 }
 
 .detail-container {
     width: 58.375rem;
     display: flex;
-    padding-left: 1.875rem;
     display: flex;
     padding-top: 2.7125rem;
+    justify-content: center;
 }
 
 
@@ -216,7 +216,7 @@ body {
     color: white;
     letter-spacing: 2px;
     font-optical-sizing: auto;
-    font-weight: 500;
+    font-weight: 400;
     font-style: normal;
     font-variation-settings:
         "slnt" 0,
@@ -231,9 +231,9 @@ body {
 
 .rntask-container {
     position: relative;
-    margin-top: 2rem;
-    padding-top: 3rem;
-    padding-bottom: 2.25rem;
+    margin-top: 3rem;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
     padding-left: 7.1875rem;
     display: flex;
     flex-direction: column;
@@ -260,26 +260,23 @@ body {
 }
 
 #rnTaskLabel {
-    font-family: "Annie Use Your Telescope";
-    font-size: 36px;
+    font-family: "Intel One Mono";
+    font-size: 28px;
     color: rgba(230, 255, 43, 1);
+    margin-bottom: 1rem;
 }
 
-li {
-    margin-top: 10px;
+.rnTask {
+    margin-top: .5rem;
     margin-left: 2.5625rem;
-    font-family: "Recursive", sans-serif;
+    font-family: "Intel One Mono";
     font-size: 20px;
     color: white;
     letter-spacing: 2px;
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
-    font-variation-settings:
-        "slnt" 0,
-        "CASL" 1,
-        "CRSV" 0.5,
-        "MONO" 1;
+
 }
 
 footer {
