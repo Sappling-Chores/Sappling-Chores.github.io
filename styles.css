@@ -76,7 +76,7 @@ body {
 .status-container{
     position: absolute;
     display: flex;
-    top: 325px;
+    top: 28.125px;
     left: 7.8125rem;
 }
 #status-label {
