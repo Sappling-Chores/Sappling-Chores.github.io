@@ -1,136 +1,22 @@
-
-const openTerminalButton = document.getElementById("open-terminal-button");
-const closeTerminalButton = document.getElementById("close-terminal-button");
-const sapplingTerminal = document.getElementById("terminal-container");
-const terminalTop = document.getElementById("terminal-top-container");
-const terminalOutput = document.getElementById("terminal-output");
-const Command = document.getElementById("command")
-
-let offsetX = 0;
-let offsetY = 0;
-
-
+// GitHub icon hover animation handling (guarded against null if icon is moved or changed)
 const githubIcon = document.querySelector('.github-icon');
-
-githubIcon.addEventListener('mouseenter', () => {
-  githubIcon.classList.add('hovered');
-  githubIcon.classList.remove('unhovered');
-})
-
-githubIcon.addEventListener('mouseleave', () => {
-  githubIcon.classList.add('unhovered');
-  githubIcon.classList.remove('hovered');
-})
-
-
-
-openTerminalButton.addEventListener('mouseenter', () => {
-  openTerminalButton.classList.add('hovered');
-  openTerminalButton.classList.remove('unhovered');
-})
-
-openTerminalButton.addEventListener('mouseleave', () => {
-  openTerminalButton.classList.add('unhovered');
-  openTerminalButton.classList.remove('hovered');
-})
-
-
-function openTerminal() {
-  sapplingTerminal.classList.add("active");
-  openTerminalButton.classList.add("opened");
-  const rect = sapplingTerminal.getBoundingClientRect();
-  sapplingTerminal.style.left = (window.innerWidth / 2 - rect.width / 2) + 'px';
-  sapplingTerminal.style.top = (window.innerHeight / 2 - rect.height / 2) + 'px';
-
-  Command.focus();
-}
-
-
-function closeTerminal() {
-  sapplingTerminal.classList.remove("active");
-  openTerminalButton.classList.remove("opened");
-  const rect = sapplingTerminal.getBoundingClientRect();
-  sapplingTerminal.style.left = (window.innerWidth / 2 - rect.width / 2) + 'px';
-  sapplingTerminal.style.top = (window.innerHeight / 2 - rect.height / 2) + 'px';
-}
-
-function mouseClkCordTop() {
-  terminalTop.addEventListener("mousedown", (e) => {
-    if (e.button === 0) {
-      offsetX = e.clientX - sapplingTerminal.getBoundingClientRect().left;
-      offsetY = e.clientY - sapplingTerminal.getBoundingClientRect().top;
-    }
+if (githubIcon) {
+  githubIcon.addEventListener('mouseenter', () => {
+    githubIcon.classList.add('hovered');
+    githubIcon.classList.remove('unhovered');
   });
 
-  terminalTop.addEventListener("mousemove", (e) => {
-    if (e.buttons === 0) return;
-    sapplingTerminal.style.left = (e.clientX - offsetX) + 'px';
-    sapplingTerminal.style.top = (e.clientY - offsetY) + 'px';
+  githubIcon.addEventListener('mouseleave', () => {
+    githubIcon.classList.add('unhovered');
+    githubIcon.classList.remove('hovered');
   });
-
-
 }
 
-const commandActions = {
-  help: () => printToTerminal("Commands: about, projects, blog, email", "output"),
-  about: () => window.location.href = "/About/index.html",
-  projects: () => window.location.href = "/Projects/index.html",
-  blog: () => window.location.href = "/blog/index.html",
-  email: () => window.location.href = "mailto:itsmohammadsarfaraz@gmail.com",
-  github: () => window.location.href = "https://github.com/Sappling-Chores",
-};
-
-
-function commmandInput() {
-  Command.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      const cmd = Command.value.trim();
-      if (!cmd) return;
-
-      printToTerminal(cmd, "input");
-      Command.value = "";
-
-      if (commandActions[cmd]) {
-        commandActions[cmd]();
-      }
-    }
-  })
-}
-
-
-printToTerminal("Use this terminal for navigation");
-printToTerminal("");
-printToTerminal("Click on the command");
-printToTerminal("");
-printToTerminal("Or use the terminal")
-printToTerminal("");
-printToTerminal("");
-printToTerminal("");
-
-
-const commands = ["help", "about", "projects", "blog", "email", "github"];
-
-for (let i = 0; i < commands.length; i++) {
-  printToTerminal(commands[i], "cmdclk");
-}
-
-
-function printToTerminal(text, type = "output") {
-  const line = document.createElement("div");
-  line.classList.add("terminal-line", type);
-  if (line.textContent = type === "cmdclk") {
-    line.addEventListener("click", (e) => {
-      commandActions[text]();
-    });
-  }
-  line.textContent = type === "input" ? "> " + text : text;
-  terminalOutput.appendChild(line);
-  terminalOutput.scrollTop = terminalOutput.scrollHeight;
-}
-
+// Local Clock Widget (Asia/Kolkata)
 const myTime = document.getElementById("clock");
 
 function currentTime() {
+  if (!myTime) return;
   const now = new Date();
   const options = {
     timeZone: "Asia/Kolkata",
@@ -142,90 +28,130 @@ function currentTime() {
 
   const timeString = now.toLocaleString("en-IN", options);
   myTime.textContent = timeString;
-
 }
 
-setInterval(currentTime, 1000);
-currentTime();
+if (myTime) {
+  setInterval(currentTime, 1000);
+  currentTime();
+}
 
-
+// Live Status Widget and Dynamic Pulsing Dot Coloring
 const statusWidget = document.getElementById('status-widget');
+const statusDot = document.querySelector('.status-dot');
 const GIST_RAW_URL = "https://gist.githubusercontent.com/Sappling-Chores/b167ba8e2798c58ff2c497febde568ad/raw/status.json";
 
 async function fetchPythonStatus() {
+  if (!statusWidget) return;
   try {
-
     const response = await fetch(`${GIST_RAW_URL}?t=${new Date().getTime()}`);
     const data = await response.json();
-
 
     const statusList = ["Code", "Fusion-360", "KiCad", "Chrome", "Offline", "YouTube", "Study", "Music"];
 
     let status_live = data.status;
     let music_artist = data.musicArtist;
     let show_status_val = "Online 🟢";
-    const statusWidget = document.getElementById("status-widget");
+    let statusColor = "var(--dot-color)";
 
     switch (status_live) {
-      case statusList[0]:
+      case statusList[0]: // Code
         show_status_val = "working!! 💻";
-        statusWidget.style.color = "rgb(173, 255, 47)";
+        statusColor = "rgb(173, 255, 47)";
         break;
 
-      case statusList[1]:
+      case statusList[1]: // Fusion-360
         show_status_val = "cad time! 🗿";
-        statusWidget.style.color = "rgb(255, 165, 0)";
+        statusColor = "rgb(255, 165, 0)";
         break;
 
-
-      case statusList[2]:
+      case statusList[2]: // KiCad
         show_status_val = "Wires⚡";
-        statusWidget.style.color = "rgb(144,213,255)";
+        statusColor = "rgb(144, 213, 255)";
         break;
 
-      case statusList[3]:
+      case statusList[3]: // Chrome
         show_status_val = "Chrome 🥳";
-        statusWidget.style.color = "rgb(255, 255, 0)";
+        statusColor = "rgb(255, 255, 0)";
         break;
 
-      case statusList[4]:
+      case statusList[4]: // Offline
         show_status_val = "Sleeping 💤";
-        statusWidget.style.color = "#FFC0CB";
+        statusColor = "#FFC0CB";
         break;
 
-      case statusList[5]:
+      case statusList[5]: // YouTube
         show_status_val = "Youtube 🍿";
-        statusWidget.style.color = "rgb(255, 0, 0)";
+        statusColor = "rgb(255, 0, 0)";
         break;
 
-      case statusList[6]:
-        show_status_val = "Studying 😭"
-        statusWidget.style.color = "blue";
+      case statusList[6]: // Study
+        show_status_val = "Studying 😭";
+        statusColor = "rgb(88, 86, 214)"; // Sleek violet/blue instead of generic blue
         break;
 
-      case statusList[7]:
-        show_status_val = `Listening to '${music_artist}'`;
-        statusWidget.style.color = "#DAB1DA"
+      case statusList[7]: // Music
+        show_status_val = `Listening to '${music_artist}' 🎵`;
+        statusColor = "#DAB1DA";
         break;
     }
 
-    document.getElementById('status-widget').innerHTML = `<p>${show_status_val}</p>`;
-  }
-
-
-  catch (error) {
+    statusWidget.innerHTML = `<p>${show_status_val}</p>`;
+    statusWidget.style.color = statusColor;
+    if (statusDot) {
+      statusDot.style.backgroundColor = statusColor;
+    }
+  } catch (error) {
     console.error("Error fetching status:", error);
+    if (statusWidget) {
+      statusWidget.textContent = "Online 🟢";
+    }
   }
 }
 
-fetchPythonStatus();
-setInterval(fetchPythonStatus, 15000);
+if (statusWidget) {
+  fetchPythonStatus();
+  setInterval(fetchPythonStatus, 15000);
+}
 
+// Light / Dark Theme Toggle Controller
+const themeToggleBtn = document.getElementById('theme-toggle');
+const body = document.body;
 
+function initTheme() {
+  const savedTheme = localStorage.getItem('theme');
+  const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-openTerminalButton.addEventListener("click", openTerminal);
-closeTerminalButton.addEventListener("click", closeTerminal);
-mouseClkCordTop();
-commmandInput();
+  if (savedTheme === 'light') {
+    body.classList.remove('dark-mode');
+    body.classList.add('light-mode');
+  } else if (savedTheme === 'dark') {
+    body.classList.remove('light-mode');
+    body.classList.add('dark-mode');
+  } else {
+    // Fallback to system configuration
+    if (systemDark) {
+      body.classList.remove('light-mode');
+      body.classList.add('dark-mode');
+    } else {
+      body.classList.remove('dark-mode');
+      body.classList.add('light-mode');
+    }
+  }
+}
 
+if (themeToggleBtn) {
+  themeToggleBtn.addEventListener('click', () => {
+    if (body.classList.contains('dark-mode')) {
+      body.classList.remove('dark-mode');
+      body.classList.add('light-mode');
+      localStorage.setItem('theme', 'light');
+    } else {
+      body.classList.remove('light-mode');
+      body.classList.add('dark-mode');
+      localStorage.setItem('theme', 'dark');
+    }
+  });
+}
 
+// Initialize theme state on script load
+initTheme();

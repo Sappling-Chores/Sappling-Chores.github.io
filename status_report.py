@@ -71,11 +71,11 @@ def monitor_active_window():
                     "IU",
                     "Taeyeon",
                     "Jungkook",
-                    "V",
+                    
                     "Jimin",
                     "Agust D",
                     "RM",
-                    "Jisoo",
+                    "JISOO",
                     "MEOVV",
                     "KISS OF LIFE",
                     "ZEROBASEONE",
@@ -129,7 +129,7 @@ def monitor_active_window():
                 current_window = new_window
                 
 
-                if "Fusion 360" in current_window:
+                if "Autodesk Fusion" in current_window:
                     status_text = "Fusion-360"
                     print(f"Updating website to: {status_text}")
                     update_gist(status_text)
@@ -157,7 +157,7 @@ def monitor_active_window():
                 elif any(artist in current_window for artist in musicArtist):
                     status_text = "Music"
                     common = [artist for artist in musicArtist if artist in current_window]
-                    artist_name = ", ".join(common)
+                    artist_name = common[0]
                     print(artist_name)
                     print(f"Updating status to: {status_text}")
                     update_gist(status_text, artist_name)
