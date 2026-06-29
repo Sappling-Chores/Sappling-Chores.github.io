@@ -93,6 +93,11 @@ async function fetchPythonStatus() {
         show_status_val = `Listening to '${music_artist}' 🎵`;
         statusColor = "#DAB1DA";
         break;
+
+      case statusList[8]:
+        show_status_val = "Offline"
+        statusColor = "#808080"
+        break;
     }
 
     statusWidget.innerHTML = `<p>${show_status_val}</p>`;
