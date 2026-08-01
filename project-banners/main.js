@@ -53,6 +53,9 @@
     article.id = "banner-" + index;
     article.setAttribute("aria-label", "Project: " + esc(project.title));
 
+    // imagePosition defaults to "center" when not specified in projects.js
+    const imgPosition = esc(project.imagePosition || "center");
+
     article.innerHTML = `
       <img
         class="banner__bg"
@@ -60,6 +63,7 @@
         alt="${esc(project.title)} background"
         loading="${isFirst ? "eager" : "lazy"}"
         decoding="async"
+        style="object-position: ${imgPosition};"
       />
 
       <div class="banner__content">

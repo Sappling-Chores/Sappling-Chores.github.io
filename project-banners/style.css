@@ -19,12 +19,14 @@ body {
   background: #0a0a0a;
   color: #f0f0f0;
   /* Prevent body scroll; the .scroll-container handles it */
+  height: 100vh;      /* fallback for browsers without dvh */
   height: 100dvh;
   overflow: hidden;
 }
 
 /* ---------- Scroll container ---------- */
 .scroll-container {
+  height: 100vh;      /* fallback */
   height: 100dvh;
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
@@ -42,6 +44,7 @@ body {
 .banner {
   position: relative;
   width: 100%;
+  height: 100vh;      /* fallback */
   height: 100dvh;
   scroll-snap-align: start;
 
@@ -54,13 +57,15 @@ body {
 }
 
 /* Full-bleed background image */
+/* object-position is set per-project via inline style in main.js   */
+/* (defaults to 'center' when imagePosition is omitted in projects.js) */
 .banner__bg {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
+  object-position: center; /* overridden by inline style when imagePosition is set */
   /* Slight de-saturation so overlaid text pops */
   filter: saturate(0.8);
   z-index: 0;
@@ -223,4 +228,102 @@ body {
 .nav-dot.active {
   background: #ffffff;
   transform: scale(1.4);
+}
+
+/* ==========================================================
+   Mobile — max-width: 768px
+   ========================================================== */
+@media (max-width: 768px) {
+
+  /* ---- Scroll container: proximity snap is more forgiving
+          when a banner is slightly taller than the viewport ---- */
+  .scroll-container {
+    scroll-snap-type: y proximity;
+  }
+
+  /* ---- Banner: flexible height so content is never clipped ---- */
+  .banner {
+    /* Aim for full-screen but grow if content needs more room */
+    height: auto;
+    min-height: 100vh;   /* fallback */
+    min-height: 100dvh;
+    /* Stack content top → bottom instead of centring vertically;
+       this prevents the description from hiding behind the title
+       on very short viewports. */
+    justify-content: flex-start;
+    padding-top: env(safe-area-inset-top, 0px); /* notch-safe */
+  }
+
+  /* ---- Text content ---- */
+  .banner__content {
+    /* Tighter padding on small screens */
+    padding: 1.5rem 1.25rem 0.5rem;
+    max-width: 100%;
+    /* Push content down from the very top edge */
+    margin-top: clamp(3rem, 12vw, 5rem);
+  }
+
+  .banner__title {
+    /* Keep readable but don't dominate the whole screen */
+    font-size: clamp(1.6rem, 7vw, 2.4rem);
+    margin-bottom: 0.65rem;
+  }
+
+  .banner__description {
+    font-size: clamp(0.875rem, 3.8vw, 1rem);
+    line-height: 1.55;
+  }
+
+  /* ---- Buttons: flow after description instead of being
+          absolutely positioned (avoids overlap on short screens) ---- */
+  .banner__actions {
+    position: static;          /* leave the absolute-positioning flow */
+    margin-top: 1.25rem;
+    margin-left: 1.25rem;
+    margin-bottom: 2rem;       /* breathing room above the next banner */
+    bottom: auto;
+    left: auto;
+    gap: 0.6rem;
+  }
+
+  /* Ensure at least 44 × 44 px touch target (WCAG 2.5.5) */
+  .btn {
+    min-height: 44px;
+    padding: 0.55em 1.25em;
+    font-size: 0.85rem;
+  }
+
+  /* ---- Hide nav dots on mobile — not enough room on the right ---- */
+  .nav-dots {
+    display: none;
+  }
+
+  /* ---- Move scroll-hint so it doesn't clash with the buttons ---- */
+  .scroll-hint {
+    bottom: 0.75rem;
+    right: 0.75rem;
+  }
+
+  /* ---- Gradient: push heavier darkness lower so the
+          image mid-section stays visible ---- */
+  .banner::after {
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.35) 0%,
+        rgba(0, 0, 0, 0.45) 30%,
+        rgba(0, 0, 0, 0.78) 100%
+      );
+  }
+}
+
+/* Slightly narrower phones (≤ 430px) — minor tweaks only */
+@media (max-width: 430px) {
+  .banner__content {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .banner__actions {
+    margin-left: 1rem;
+  }
 }
