@@ -41,24 +41,44 @@ body {
 }
 
 /* ---------- Banner ---------- */
+/*
+ * .banner  — the outer scroll-snap target (exactly one per project).
+ *             On desktop it locks to 100dvh; on mobile its height
+ *             follows the image's natural aspect ratio instead.
+ */
 .banner {
   position: relative;
   width: 100%;
   height: 100vh;      /* fallback */
   height: 100dvh;
   scroll-snap-align: start;
+  overflow: hidden;
+}
 
+/*
+ * .banner__media — the image + overlay wrapper.
+ *
+ * Desktop: fills the banner absolutely (so it covers the full viewport).
+ * Mobile:  becomes an in-flow block; its height is set by the <img>
+ *          inside it, which carries its natural aspect ratio.
+ *
+ * All overlay and text children are positioned relative to this element.
+ */
+.banner__media {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+
+  /* Flex so .banner__content sits vertically centred on desktop */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-
-  overflow: hidden;
 }
 
-/* Full-bleed background image */
-/* object-position is set per-project via inline style in main.js   */
-/* (defaults to 'center' when imagePosition is omitted in projects.js) */
+/* Full-bleed background image (desktop) */
+/* object-position is set per-project via inline style in main.js         */
+/* (defaults to 'center' when imagePosition is omitted in projects.js)    */
 .banner__bg {
   position: absolute;
   inset: 0;
@@ -71,8 +91,9 @@ body {
   z-index: 0;
 }
 
-/* Dark gradient overlay — stronger at bottom where buttons live */
-.banner::after {
+/* Dark gradient overlay — on .banner__media so it covers only the image  */
+/* (important on mobile, where .banner__media no longer fills the banner) */
+.banner__media::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -84,6 +105,8 @@ body {
       rgba(0, 0, 0, 0.72) 100%
     );
   z-index: 1;
+  /* Must not block clicks on buttons that sit inside the same stacking context */
+  pointer-events: none;
 }
 
 /* ---------- Text content ---------- */
@@ -232,98 +255,123 @@ body {
 
 /* ==========================================================
    Mobile — max-width: 768px
+   The fundamental shift: instead of forcing the banner to
+   fill the viewport and cropping the image to fit, we let
+   the image display at its natural aspect ratio and let the
+   banner height follow. Banners may be shorter than the
+   viewport; the user sees a sliver of the next one — that's
+   intentional and acceptable per spec.
    ========================================================== */
 @media (max-width: 768px) {
 
-  /* ---- Scroll container: proximity snap is more forgiving
-          when a banner is slightly taller than the viewport ---- */
+  /* ---- Body / scroll-container: allow natural-height content ---- */
+  body {
+    /* Remove the overflow:hidden lock so the scroll container
+       can handle variable-height banners without clipping them. */
+    overflow: hidden; /* keep — the container scrolls internally */
+  }
+
+  /* ---- Proximity snap: more forgiving than mandatory when
+          banners have variable heights across images ---- */
   .scroll-container {
     scroll-snap-type: y proximity;
   }
 
-  /* ---- Banner: flexible height so content is never clipped ---- */
+  /* ---- Banner: height follows .banner__media (the image),
+          not the viewport ---- */
   .banner {
-    /* Aim for full-screen but grow if content needs more room */
     height: auto;
-    min-height: 100vh;   /* fallback */
-    min-height: 100dvh;
-    /* Stack content top → bottom instead of centring vertically;
-       this prevents the description from hiding behind the title
-       on very short viewports. */
-    justify-content: flex-start;
-    padding-top: env(safe-area-inset-top, 0px); /* notch-safe */
+    min-height: 0;     /* allow banners shorter than viewport */
+    overflow: visible; /* let the sliver of the next banner be visible */
   }
 
-  /* ---- Text content ---- */
+  /* ---- Image wrapper: switch from absolute (full-viewport fill)
+          to in-flow block (height = image's natural height) ---- */
+  .banner__media {
+    position: relative; /* overrides desktop `position: absolute` */
+    inset: auto;
+    width: 100%;
+
+    /* Dark fill for any letterbox areas that appear around a
+       contained image (e.g. portrait image on landscape screen) */
+    background: #111111;
+
+    /* Reset the desktop flex centering — content is now
+       absolutely positioned inside the image area instead */
+    display: block;
+  }
+
+  /* ---- Image: natural aspect ratio, no cropping ---- */
+  .banner__bg {
+    position: static;   /* in-flow — sets .banner__media's height */
+    display: block;
+    width: 100%;
+    height: auto;       /* height driven by pixel dimensions, not container */
+    object-fit: contain; /* full image visible, nothing cropped */
+    /* object-position from inline style still honoured */
+  }
+
+  /* ---- Text content: absolutely overlay the image area ---- */
   .banner__content {
-    /* Tighter padding on small screens */
-    padding: 1.5rem 1.25rem 0.5rem;
+    position: absolute; /* relative to .banner__media (position: relative) */
+    inset: 0;           /* cover the whole image */
+    z-index: 2;
+
+    /* Vertical flex so title → description stack naturally */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* anchor text near the bottom of image */
+    padding: 1rem 1.1rem 0.5rem;
     max-width: 100%;
-    /* Push content down from the very top edge */
-    margin-top: clamp(3rem, 12vw, 5rem);
   }
 
   .banner__title {
-    /* Keep readable but don't dominate the whole screen */
-    font-size: clamp(1.6rem, 7vw, 2.4rem);
-    margin-bottom: 0.65rem;
+    font-size: clamp(1.2rem, 5vw, 1.8rem);
+    margin-bottom: 0.4rem;
+    line-height: 1.15;
   }
 
   .banner__description {
-    font-size: clamp(0.875rem, 3.8vw, 1rem);
-    line-height: 1.55;
+    font-size: clamp(0.78rem, 3.2vw, 0.92rem);
+    line-height: 1.5;
   }
 
-  /* ---- Buttons: flow after description instead of being
-          absolutely positioned (avoids overlap on short screens) ---- */
+  /* ---- Buttons: in-flow inside .banner__content, below description ---- */
+  /*      .banner__actions is a sibling of .banner__content, both           */
+  /*      absolutely positioned inside .banner__media.                      */
   .banner__actions {
-    position: static;          /* leave the absolute-positioning flow */
-    margin-top: 1.25rem;
-    margin-left: 1.25rem;
-    margin-bottom: 2rem;       /* breathing room above the next banner */
-    bottom: auto;
-    left: auto;
-    gap: 0.6rem;
+    bottom: 0.6rem;
+    left: 1.1rem;
+    gap: 0.5rem;
+    /* Inherit position: absolute + z-index: 2 from base CSS */
   }
 
-  /* Ensure at least 44 × 44 px touch target (WCAG 2.5.5) */
+  /* WCAG 2.5.5 — 44 × 44 px minimum touch target */
   .btn {
     min-height: 44px;
-    padding: 0.55em 1.25em;
-    font-size: 0.85rem;
+    padding: 0.5em 1.1em;
+    font-size: 0.82rem;
   }
 
-  /* ---- Hide nav dots on mobile — not enough room on the right ---- */
-  .nav-dots {
-    display: none;
-  }
-
-  /* ---- Move scroll-hint so it doesn't clash with the buttons ---- */
+  /* ---- Scroll hint: tuck into the image bottom-right ---- */
   .scroll-hint {
-    bottom: 0.75rem;
+    bottom: 0.6rem;
     right: 0.75rem;
   }
 
-  /* ---- Gradient: push heavier darkness lower so the
-          image mid-section stays visible ---- */
-  .banner::after {
-    background:
-      linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0.35) 0%,
-        rgba(0, 0, 0, 0.45) 30%,
-        rgba(0, 0, 0, 0.78) 100%
-      );
+  /* ---- Nav dots: hidden on mobile (not enough side space) ---- */
+  .nav-dots {
+    display: none;
   }
 }
 
-/* Slightly narrower phones (≤ 430px) — minor tweaks only */
+/* Slightly narrower phones (≤ 430px) — tighten side padding */
 @media (max-width: 430px) {
   .banner__content {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 0.9rem;
+    padding-right: 0.9rem;
   }
   .banner__actions {
-    margin-left: 1rem;
+    left: 0.9rem;
   }
 }

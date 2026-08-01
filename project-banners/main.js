@@ -57,44 +57,48 @@
     const imgPosition = esc(project.imagePosition || "center");
 
     article.innerHTML = `
-      <img
-        class="banner__bg"
-        src="${esc(project.image)}"
-        alt="${esc(project.title)} background"
-        loading="${isFirst ? "eager" : "lazy"}"
-        decoding="async"
-        style="object-position: ${imgPosition};"
-      />
+      <div class="banner__media">
 
-      <div class="banner__content">
-        <h1 class="banner__title">${esc(project.title)}</h1>
-        <p  class="banner__description">${esc(project.description)}</p>
-      </div>
+        <img
+          class="banner__bg"
+          src="${esc(project.image)}"
+          alt="${esc(project.title)} background"
+          loading="${isFirst ? "eager" : "lazy"}"
+          decoding="async"
+          style="object-position: ${imgPosition};"
+        />
 
-      <div class="banner__actions">
-        <a
-          class="btn btn--demo"
-          href="${esc(project.demoUrl)}"
-          id="demo-btn-${index}"
-          target="_blank"
-          rel="noopener noreferrer"
-        >Demo ↗</a>
-        <a
-          class="btn btn--github"
-          href="${esc(project.githubUrl)}"
-          id="github-btn-${index}"
-          target="_blank"
-          rel="noopener noreferrer"
-        >GitHub ↗</a>
-      </div>
+        <div class="banner__content">
+          <h1 class="banner__title">${esc(project.title)}</h1>
+          <p  class="banner__description">${esc(project.description)}</p>
+        </div>
 
-      ${isFirst
-        ? `<div class="scroll-hint" aria-hidden="true">
-             <span class="scroll-hint__label">Scroll</span>
-             <span class="scroll-hint__arrow"></span>
-           </div>`
-        : ""
-      }
+        <div class="banner__actions">
+          <a
+            class="btn btn--demo"
+            href="${esc(project.demoUrl)}"
+            id="demo-btn-${index}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Demo ↗</a>
+          <a
+            class="btn btn--github"
+            href="${esc(project.githubUrl)}"
+            id="github-btn-${index}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >GitHub ↗</a>
+        </div>
+
+        ${isFirst
+          ? `<div class="scroll-hint" aria-hidden="true">
+               <span class="scroll-hint__label">Scroll</span>
+               <span class="scroll-hint__arrow"></span>
+             </div>`
+          : ""
+        }
+
+      </div><!-- /.banner__media -->
     `;
 
     fragment.appendChild(article);
