@@ -9,9 +9,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="Assets/Group 10.png">
+    <!-- Inline script for early theme application (prevents flash of wrong theme) -->
+    <script>
+        (function () {
+            var saved = localStorage.getItem('theme');
+            var theme = saved || 'dark-mode';
+            document.documentElement.dataset.themeLoading = theme;
+        })();
+    </script>
 </head>
 
-<body id="body" class="dark-mode">
+<body id="body" class="" data-theme-init>
+    <script>
+        document.body.classList.add(document.documentElement.dataset.themeLoading);
+    </script>
 
     <div class="container">
         <!-- Navigation Header -->
@@ -23,7 +34,7 @@
                     <span class="nav-separator">|</span>
                     <a href="https://blog.ayysappling.com" class="nav-link">blog</a>
                     <span class="nav-separator">|</span>
-                    <a href="Projects/index.html" class="nav-link">projects</a>
+                    <a href="./Projects/" class="nav-link">projects</a>
                 </nav>
                 <button class="theme-toggle-btn" id="theme-toggle" aria-label="Toggle dark/light theme">
                     <!-- Sun SVG (visible in dark mode) -->
@@ -195,7 +206,7 @@
                 <span class="nav-separator">|</span>
                 <a href="https://blog.ayysappling.com" class="nav-link">blog</a>
                 <span class="nav-separator">|</span>
-                <a href="Projects/index.html" class="nav-link">projects</a>
+                <a href="./Projects/" class="nav-link">projects</a>
             </nav>
 
             <div class="footer-info">

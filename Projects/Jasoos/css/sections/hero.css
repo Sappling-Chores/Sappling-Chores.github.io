@@ -1,0 +1,182 @@
+/* ============================================================
+   REUSABLE HERO & VISUAL SHOWCASE BLOCKS
+   Standalone, stackable block types for storytelling.
+   ============================================================ */
+
+/* === .hero-banner === */
+.hero-banner {
+    position: relative;
+    min-height: max(420px, 100vh);
+    background: var(--hero-accent, var(--bg));
+    overflow: hidden;
+    padding: clamp(1.5rem, 4vw, 3rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.hero-banner__title {
+    position: absolute;
+    top: clamp(1rem, 5vh, 3rem);
+    left: 0; right: 0;
+    text-align: center;
+    font-size: clamp(4rem, 15vw, 11rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 0.95;
+    color: #ffffff; /* fixed white regardless of dark/light mode — full-bleed brand color scene */
+    z-index: 2;
+    pointer-events: none;
+}
+
+.hero-banner__image {
+    position: relative;
+    z-index: 1;
+    max-width: 62%;
+    margin: 0 auto;
+    transform: translateY(6%); /* lets image ride up into title's lower portion */
+    display: block;
+}
+
+.hero-banner__tagline, .hero-banner__cta {
+    position: relative;
+    z-index: 3;
+}
+
+.hero-banner__tagline {
+    color: #ffffff;
+    font-size: 1.1rem;
+}
+
+.hero-banner__cta {
+    position: absolute;
+    right: clamp(1.5rem, 4vw, 3rem);
+    bottom: clamp(1.5rem, 4vw, 3rem);
+    background: #ffffff;
+    color: #111111;
+    padding: 0.8rem 1.6rem;
+    border-radius: 999px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.hero-banner__cta:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
+}
+
+@media (max-width: 600px) {
+    .hero-banner {
+        justify-content: flex-start;
+        gap: 1.5rem;
+    }
+
+    .hero-banner__title {
+        position: relative;
+        top: 0;
+        font-size: clamp(3rem, 12vw, 5rem);
+        text-align: left;
+        pointer-events: auto;
+    }
+
+    .hero-banner__image {
+        max-width: 90%;
+        transform: none;
+    }
+
+    .hero-banner__cta {
+        position: relative;
+        right: auto;
+        bottom: auto;
+        align-self: flex-start;
+        margin-top: 1rem;
+    }
+}
+
+/* === .showcase-fullbleed === */
+.showcase-fullbleed {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%); /* breaks out of parent max-width/padding */
+}
+
+.showcase-fullbleed img {
+    width: 100%;
+    height: clamp(60vh, 80vh, 900px);
+    object-fit: cover;
+    display: block;
+}
+
+.showcase-fullbleed--captioned {
+    position: relative;
+}
+
+.showcase-fullbleed--captioned .showcase-fullbleed__caption {
+    position: absolute;
+    left: 2rem;
+    bottom: 2rem;
+    color: #ffffff;
+    font-size: 0.9rem;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+}
+
+/* === .showcase-split === */
+.showcase-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px; /* thin gutter showing background color */
+    background: var(--bg);
+}
+
+.showcase-split__panel {
+    position: relative;
+}
+
+.showcase-split__panel img {
+    width: 100%;
+    height: clamp(50vh, 65vh, 780px);
+    object-fit: cover;
+    display: block;
+}
+
+.showcase-split__caption {
+    position: absolute;
+    left: 1.5rem;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    color: #ffffff;
+    font-size: 1rem;
+    line-height: 1.5;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    padding: 0.8rem 1.2rem;
+    border-radius: 8px;
+}
+
+@media (max-width: 700px) {
+    .showcase-split {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* === .showcase-statement === */
+.showcase-statement {
+    padding: clamp(4rem, 10vw, 8rem) var(--section-padding-x);
+    text-align: center;
+    background: var(--bg);
+}
+
+.showcase-statement p {
+    font-size: clamp(2rem, 5.5vw, 3.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    max-width: 900px;
+    margin: 0 auto;
+    color: var(--text-primary);
+}

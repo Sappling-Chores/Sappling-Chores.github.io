@@ -1,0 +1,323 @@
+/* ============================================================
+   PCB / CIRCUIT SECTION
+   Reuses viewer pattern + adds annotated callout image
+   ============================================================ */
+
+.pcb-section {
+    background: var(--bg);
+    padding-bottom: 0;
+}
+
+.pcb-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+}
+
+/* §6.5 — unified showcase container: accordion left, viewer right */
+.pcb-showcase {
+    position: relative;
+    width: 100vw;
+    left: 50%;
+    transform: translateX(-50%);
+    display: grid;
+    grid-template-columns: minmax(260px, 0.85fr) 1.15fr;
+    align-items: center;
+    gap: clamp(2rem, 5vw, 4rem);
+    padding: clamp(2rem, 6vw, 4rem);
+    border-radius: 0;
+    background: var(--pcb-gradient);
+    margin-top: 2.5rem;
+    aspect-ratio: 16 / 9;
+    box-sizing: border-box;
+}
+
+.pcb-showcase .spec-accordion {
+    order: 1;
+}
+
+.pcb-showcase .pcb-viewer {
+    order: 2;
+    height: 100%;
+    width: 100%;
+    background: transparent; /* gradient comes from .pcb-showcase parent */
+}
+
+/* Viewer area (legacy stub — kept for compatibility) */
+.pcb-viewer-area {
+    position: relative;
+}
+
+.pcb-viewer {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border-radius: var(--viewer-radius);
+    overflow: hidden;
+}
+
+.pcb-viewer[data-bg="image"] {
+    background-image: var(--design-bg-image);
+    background-size: cover;
+    background-position: center;
+}
+
+.pcb-viewer model-viewer {
+    width: 100%;
+    height: 100%;
+    --poster-color: transparent;
+    background: transparent;
+    --progress-bar-color: var(--text-secondary);
+}
+
+/* Overlay toggle group inside pcb container */
+.pcb-viewer .toggle-group {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    background: rgba(20, 20, 20, 0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+body.light-mode .pcb-viewer .toggle-group {
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+/* Annotated image overlay */
+.pcb-annotated {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    z-index: 5;
+    border-radius: var(--viewer-radius);
+    overflow: hidden;
+    background: transparent;
+}
+
+.pcb-annotated.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.pcb-annotated-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Callout labels */
+.pcb-callout {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    z-index: 6;
+    pointer-events: auto;
+    cursor: default;
+}
+
+.callout-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--text-primary);
+    border: 2px solid var(--bg);
+    box-shadow: 0 0 0 2px var(--text-primary);
+    flex-shrink: 0;
+    animation: callout-pulse 2s ease-in-out infinite;
+}
+
+@keyframes callout-pulse {
+    0%, 100% { box-shadow: 0 0 0 2px var(--text-primary); }
+    50% { box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.3); }
+}
+
+body.light-mode .callout-dot {
+    background: var(--text-primary);
+    border-color: var(--bg);
+    box-shadow: 0 0 0 2px var(--text-primary);
+}
+
+@keyframes callout-pulse-light {
+    0%, 100% { box-shadow: 0 0 0 2px var(--text-primary); }
+    50% { box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.15); }
+}
+
+body.light-mode .callout-dot {
+    animation-name: callout-pulse-light;
+}
+
+.callout-label {
+    padding: 0.25rem 0.6rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    font-family: var(--font-mono, monospace);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    background: rgba(10, 10, 10, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--toggle-pill-border);
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
+body.light-mode .callout-label {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+/* Callout line (connecting dot to component) */
+.callout-line {
+    position: absolute;
+    background: var(--callout-line-color);
+    z-index: 5;
+}
+
+.callout-line.horizontal {
+    height: 1px;
+    width: 30px;
+}
+
+.callout-line.vertical {
+    width: 1px;
+    height: 30px;
+}
+
+/* Controls bar */
+.pcb-controls {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+    flex-wrap: wrap;
+}
+
+/* PCB text description */
+.pcb-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.pcb-description {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+}
+
+/* Accordion Specs */
+.spec-accordion {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 0;
+    margin: 0;
+}
+
+.spec-accordion__trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.9rem 1.4rem;
+    background: rgba(120, 120, 128, 0.12);
+    border: none;
+    border-radius: 999px;
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.2s ease;
+}
+
+body.light-mode .spec-accordion__trigger {
+    background: rgba(0, 0, 0, 0.045);
+}
+
+.spec-accordion__trigger:hover {
+    background: rgba(120, 120, 128, 0.18);
+}
+
+body.light-mode .spec-accordion__trigger:hover {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+.spec-accordion__icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    transition: transform 0.25s ease;
+}
+
+.spec-accordion__trigger[aria-expanded="true"] .spec-accordion__icon {
+    transform: rotate(45deg);
+}
+
+.spec-accordion__panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease;
+    padding: 0 1.4rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.spec-accordion__panel > p {
+    overflow: hidden;
+    margin: 0;
+}
+
+.spec-accordion__item.open .spec-accordion__panel {
+    grid-template-rows: 1fr;
+    padding-top: 0.5rem;
+    padding-bottom: 1rem;
+}/* Responsive */
+@media (max-width: 900px) {
+    .pcb-showcase {
+        grid-template-columns: 1fr;
+        aspect-ratio: auto;
+        min-height: auto;
+    }
+
+    .pcb-showcase .pcb-viewer {
+        order: 1; /* model first on mobile */
+        aspect-ratio: 16 / 9;
+    }
+
+    .pcb-showcase .spec-accordion {
+        order: 2;
+    }
+}
+
+@media (max-width: 768px) {
+    .pcb-showcase .pcb-viewer {
+        aspect-ratio: 4 / 3;
+        border-radius: 12px;
+    }
+
+    .callout-label {
+        font-size: 0.6rem;
+        padding: 0.2rem 0.4rem;
+    }
+}

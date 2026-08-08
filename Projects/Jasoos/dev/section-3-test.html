@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Section 3 Test — Industrial Design Viewer</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Intel+One+Mono:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../../styles.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/sections/design.css">
+
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+
+    <style>
+        /* Test page specific */
+        .test-header {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        .test-header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.5rem;
+        }
+        .test-header p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        .test-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        .test-log {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: var(--toggle-pill-bg);
+            border: 1px solid var(--toggle-pill-border);
+            border-radius: 8px;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body id="body" class="dark-mode">
+    <div class="showcase-page">
+        <div class="test-header">
+            <h1>🧪 Section 3 Test — Industrial Design Viewer</h1>
+            <p>
+                Isolated test harness for the assembled↔exploded model toggle and 3D↔static image switch.
+                No scroll choreography here — just the interactive viewer controls.
+            </p>
+        </div>
+
+        <div class="test-container">
+            <div class="design-viewer-area">
+                <div class="design-viewer">
+                    <!-- Primary model -->
+                    <model-viewer
+                        class="model-primary"
+                        src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
+                        alt="Assembled product"
+                        camera-controls
+                        auto-rotate
+                        shadow-intensity="1"
+                        shadow-softness="0.5"
+                        exposure="1"
+                        interaction-prompt="none"
+                    ></model-viewer>
+
+                    <!-- Overlay model (for crossfade) -->
+                    <model-viewer
+                        class="model-overlay"
+                        alt="Exploded product"
+                        camera-controls
+                        auto-rotate
+                        shadow-intensity="1"
+                        shadow-softness="0.5"
+                        exposure="1"
+                        interaction-prompt="none"
+                    ></model-viewer>
+
+                    <!-- Static snapshot -->
+                    <img class="design-snapshot" src="" alt="Static snapshot">
+
+                    <!-- Loading -->
+                    <div class="viewer-loading">
+                        <div class="loading-spinner"></div>
+                        <span>Loading model…</span>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="design-controls">
+                    <div class="toggle-group" role="radiogroup" aria-label="Model view">
+                        <button class="toggle-btn active" data-design-model="assembled">Assembled</button>
+                        <button class="toggle-btn" data-design-model="exploded">Exploded</button>
+                    </div>
+                    <div class="toggle-group" role="radiogroup" aria-label="View mode">
+                        <button class="toggle-btn active" data-design-view="3d">3D Viewer</button>
+                        <button class="toggle-btn" data-design-view="image">Snapshot</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="test-log" id="test-log">
+                <div>Test log initialized...</div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { createViewerToggle } from '../js/viewer-toggle.js';
+
+        const MODELS = {
+            assembled: 'https://modelviewer.dev/shared-assets/models/Astronaut.glb',
+            exploded: 'https://modelviewer.dev/shared-assets/models/RobotExpressive.glb'
+        };
+        const FALLBACK = 'https://picsum.photos/seed/design-fallback/1200/675';
+
+        const log = document.getElementById('test-log');
+        function addLog(msg) {
+            const div = document.createElement('div');
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            log.appendChild(div);
+            log.scrollTop = log.scrollHeight;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.querySelector('.design-viewer');
+            const primary = container.querySelector('.model-primary');
+            const overlay = container.querySelector('.model-overlay');
+            const snapshot = container.querySelector('.design-snapshot');
+            const loading = container.querySelector('.viewer-loading');
+
+            const toggle = createViewerToggle({
+                container,
+                primaryViewer: primary,
+                overlayViewer: overlay,
+                snapshotImg: snapshot,
+                assembledSrc: MODELS.assembled,
+                explodedSrc: MODELS.exploded,
+                fallbackImage: FALLBACK,
+                loadingIndicator: loading
+            });
+
+            addLog('Viewer toggle initialized');
+
+            // Wire model toggle buttons
+            document.querySelectorAll('[data-design-model]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const target = btn.dataset.designModel;
+                    addLog(`Model toggle → ${target}`);
+                    toggle.toggleModel(target);
+                    document.querySelectorAll('[data-design-model]').forEach(b =>
+                        b.classList.toggle('active', b.dataset.designModel === target)
+                    );
+                });
+            });
+
+            // Wire view toggle buttons
+            document.querySelectorAll('[data-design-view]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const target = btn.dataset.designView;
+                    addLog(`View toggle → ${target}`);
+                    toggle.toggleView(target);
+                    document.querySelectorAll('[data-design-view]').forEach(b =>
+                        b.classList.toggle('active', b.dataset.designView === target)
+                    );
+                });
+            });
+
+            // Log model load events
+            primary.addEventListener('load', () => addLog('Primary model loaded'));
+            overlay.addEventListener('load', () => addLog('Overlay model loaded'));
+        });
+    </script>
+</body>
+</html>

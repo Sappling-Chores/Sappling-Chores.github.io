@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Section 4 Test — PCB / Circuit Viewer</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Intel+One+Mono:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../../styles.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/sections/pcb.css">
+
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+
+    <style>
+        .test-header {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        .test-header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.5rem;
+        }
+        .test-header p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        .test-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        .test-log {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: var(--toggle-pill-bg);
+            border: 1px solid var(--toggle-pill-border);
+            border-radius: 8px;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body id="body" class="dark-mode">
+    <div class="showcase-page">
+        <div class="test-header">
+            <h1>🧪 Section 4 Test — PCB / Circuit Viewer</h1>
+            <p>
+                Isolated test harness for the PCB section — annotated callout image view
+                and the switcher between "annotated image" and "3D viewer."
+            </p>
+        </div>
+
+        <div class="test-container">
+            <div class="pcb-viewer-area">
+                <div class="pcb-viewer">
+                    <!-- 3D model viewer -->
+                    <model-viewer
+                        src="https://modelviewer.dev/shared-assets/models/Horse.glb"
+                        alt="PCB 3D model"
+                        camera-controls
+                        auto-rotate
+                        shadow-intensity="0.8"
+                        exposure="1"
+                        interaction-prompt="none"
+                    ></model-viewer>
+
+                    <!-- Annotated image overlay -->
+                    <div class="pcb-annotated">
+                        <img
+                            class="pcb-annotated-image"
+                            src="https://picsum.photos/seed/pcb-annotated-test/1200/675"
+                            alt="Annotated PCB close-up"
+                        >
+                        <div class="pcb-callout" style="top: 25%; left: 20%;">
+                            <span class="callout-dot"></span>
+                            <span class="callout-label">USB-C</span>
+                        </div>
+                        <div class="pcb-callout" style="top: 45%; left: 55%;">
+                            <span class="callout-dot"></span>
+                            <span class="callout-label">MCU</span>
+                        </div>
+                        <div class="pcb-callout" style="top: 65%; left: 35%;">
+                            <span class="callout-dot"></span>
+                            <span class="callout-label">Power Reg</span>
+                        </div>
+                        <div class="pcb-callout" style="top: 30%; left: 75%;">
+                            <span class="callout-dot"></span>
+                            <span class="callout-label">SPI Flash</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="pcb-controls">
+                    <div class="toggle-group" role="radiogroup" aria-label="PCB view mode">
+                        <button class="toggle-btn active" data-pcb-view="3d">3D Model</button>
+                        <button class="toggle-btn" data-pcb-view="annotated">Annotated Image</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="test-log" id="test-log">
+                <div>Test log initialized...</div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        const log = document.getElementById('test-log');
+        function addLog(msg) {
+            const div = document.createElement('div');
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            log.appendChild(div);
+            log.scrollTop = log.scrollHeight;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const viewer = document.querySelector('.pcb-viewer');
+            const annotated = viewer.querySelector('.pcb-annotated');
+            const modelViewer = viewer.querySelector('model-viewer');
+
+            addLog('PCB viewer initialized');
+
+            // Wire view toggle
+            document.querySelectorAll('[data-pcb-view]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const target = btn.dataset.pcbView;
+                    addLog(`PCB view toggle → ${target}`);
+
+                    if (target === 'annotated') {
+                        annotated.classList.add('visible');
+                    } else {
+                        annotated.classList.remove('visible');
+                    }
+
+                    document.querySelectorAll('[data-pcb-view]').forEach(b =>
+                        b.classList.toggle('active', b.dataset.pcbView === target)
+                    );
+                });
+            });
+
+            // Log model load
+            modelViewer.addEventListener('load', () => addLog('PCB 3D model loaded'));
+
+            // Log callout interactions
+            document.querySelectorAll('.pcb-callout').forEach(callout => {
+                callout.addEventListener('mouseenter', () => {
+                    const label = callout.querySelector('.callout-label')?.textContent;
+                    addLog(`Callout hover: ${label}`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
