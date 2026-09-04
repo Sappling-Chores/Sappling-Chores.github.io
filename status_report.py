@@ -3,6 +3,7 @@ import os
 import traceback
 import asyncio
 import urllib.parse
+import re
 
 import pygetwindow as gw
 import requests
@@ -59,6 +60,43 @@ def get_itunes_meta(artist, title):
     _ITUNES_CACHE[cache_key] = (art_url, track_url, preview_url)
     return art_url, track_url, preview_url
 
+_KNOWN_ARTISTS = [
+    "JENNIE", "BIBI", "KATSEYE", "BLACKPINK", "ROSE", "ROSÉ", "LISA", "ILLIT", "BTS",
+    "Sabrina Carpenter", "Billie Eilish", "Olivia Rodrigo", "Taylor Swift", "xooos",
+    "BABYMONSTER", "NewJeans", "LE SSERAFIM", "TWICE", "IVE", "aespa", "Stray Kids",
+    "EXO", "SEVENTEEN", "ENHYPEN", "TXT", "Red Velvet", "ITZY", "NMIXX", "GIDLE",
+    "(G)I-DLE", "IU", "Taeyeon", "Jungkook", "Jimin", "Agust D", "RM", "JISOO",
+    "MEOVV", "KISS OF LIFE", "ZEROBASEONE", "RIIZE", "TWS", "BOYNEXTDOOR",
+    "Ariana Grande", "The Weeknd", "Dua Lipa", "Doja Cat", "Lana Del Rey", "Bruno Mars",
+    "Ed Sheeran", "Justin Bieber", "Harry Styles", "Rihanna", "Lady Gaga", "Katy Perry",
+    "Selena Gomez", "SZA", "Mitski", "Charli XCX", "Chappell Roan", "Post Malone",
+    "Drake", "Travis Scott", "Kendrick Lamar", "Eminem", "Imagine Dragons", "Coldplay",
+    "One Direction", "Arctic Monkeys", "Cigarettes After Sex", "TV Girl", "Laufey", "Conan Gray"
+]
+
+def clean_media_title_artist(raw_title, raw_artist):
+    title = raw_title.strip()
+    artist = raw_artist.strip()
+    
+    clean_title = re.sub(r'[\(\[\{](official|music|video|lyric|audio|hd|4k|mv).*?[\)\]\}]', '', title, flags=re.IGNORECASE).strip()
+    
+    if not artist or artist.lower() in ["youtube", "chrome", "msedge", "firefox", "brave", "unknown artist", "unknown"]:
+        if " - " in clean_title:
+            parts = clean_title.split(" - ", 1)
+            artist = parts[0].strip()
+            title = parts[1].strip()
+        elif " – " in clean_title:
+            parts = clean_title.split(" – ", 1)
+            artist = parts[0].strip()
+            title = parts[1].strip()
+        else:
+            for m_art in _KNOWN_ARTISTS:
+                if m_art.lower() in clean_title.lower():
+                    artist = m_art
+                    break
+
+    return artist, title
+
 async def fetch_media_payload_async(last_music=None):
     if not HAS_WINRT:
         if last_music:
@@ -79,15 +117,17 @@ async def fetch_media_payload_async(last_music=None):
         is_playing = (status_code == 4)
         
         props = await session.try_get_media_properties_async()
-        title = props.title.strip() if props and props.title else ""
-        artist = props.artist.strip() if props and props.artist else ""
+        raw_title = props.title.strip() if props and props.title else ""
+        raw_artist = props.artist.strip() if props and props.artist else ""
         album = props.album_title.strip() if props and props.album_title else ""
         
-        if not title and not artist:
+        if not raw_title and not raw_artist:
             if last_music:
                 last_music["isPlaying"] = False
                 return last_music
             return None
+        
+        artist, title = clean_media_title_artist(raw_title, raw_artist)
         
         timeline = session.get_timeline_properties()
         position = 0
@@ -103,7 +143,7 @@ async def fetch_media_payload_async(last_music=None):
         art_url, track_url, preview_url = get_itunes_meta(artist, title)
         
         if not track_url:
-            q = urllib.parse.quote(f"{title} {artist}".strip())
+            q = urllib.parse.quote(f"{artist} {title}".strip())
             if "spotify" in app_id:
                 track_url = f"https://open.spotify.com/search/{q}"
             else:
