@@ -78,9 +78,11 @@ def clean_media_title_artist(raw_title, raw_artist):
     title = raw_title.strip()
     artist = raw_artist.strip()
     
-    clean_title = re.sub(r'[\(\[\{](official|music|video|lyric|audio|hd|4k|mv).*?[\)\]\}]', '', title, flags=re.IGNORECASE).strip()
+    clean_title = re.sub(r'[\(\[\{](official|music|video|lyric|audio|hd|4k|mv|performance).*?[\)\]\}]', '', title, flags=re.IGNORECASE).strip()
     
-    if not artist or artist.lower() in ["youtube", "chrome", "msedge", "firefox", "brave", "unknown artist", "unknown"]:
+    is_generic_artist = (not artist) or (artist.lower() in ["youtube", "chrome", "msedge", "firefox", "brave", "unknown artist", "unknown", "hybe labels", "smtown", "jyp entertainment", "yg entertainment"])
+    
+    if is_generic_artist:
         if " - " in clean_title:
             parts = clean_title.split(" - ", 1)
             artist = parts[0].strip()
@@ -95,7 +97,29 @@ def clean_media_title_artist(raw_title, raw_artist):
                     artist = m_art
                     break
 
+    if (title.startswith("'") and title.endswith("'")) or (title.startswith('"') and title.endswith('"')):
+        title = title[1:-1].strip()
+
     return artist, title
+
+async def get_smtc_b64_thumbnail(props):
+    if not props or not props.thumbnail:
+        return ""
+    try:
+        import winrt.windows.storage.streams as streams
+        stream = await props.thumbnail.open_read_async()
+        size = stream.size
+        if size == 0:
+            return ""
+        reader = streams.DataReader(stream)
+        await reader.load_async(size)
+        buffer = bytearray(size)
+        reader.read_bytes(buffer)
+        b64 = base64.b64encode(buffer).decode("utf-8")
+        return f"data:image/jpeg;base64,{b64}"
+    except Exception as e:
+        print("SMTC b64 thumbnail exception:", e)
+        return ""
 
 async def fetch_media_payload_async(last_music=None):
     if not HAS_WINRT:
@@ -105,18 +129,29 @@ async def fetch_media_payload_async(last_music=None):
     
     try:
         manager = await wmc.GlobalSystemMediaTransportControlsSessionManager.request_async()
-        session = manager.get_current_session()
-        if not session:
+        sessions = manager.get_sessions()
+        
+        target_session = None
+        for s in sessions:
+            info = s.get_playback_info()
+            if info and info.playback_status == 4:
+                target_session = s
+                break
+                
+        if not target_session:
+            target_session = manager.get_current_session()
+            
+        if not target_session:
             if last_music:
                 last_music["isPlaying"] = False
                 return last_music
             return None
         
-        playback = session.get_playback_info()
+        playback = target_session.get_playback_info()
         status_code = playback.playback_status if playback else 0
         is_playing = (status_code == 4)
         
-        props = await session.try_get_media_properties_async()
+        props = await target_session.try_get_media_properties_async()
         raw_title = props.title.strip() if props and props.title else ""
         raw_artist = props.artist.strip() if props and props.artist else ""
         album = props.album_title.strip() if props and props.album_title else ""
@@ -129,7 +164,7 @@ async def fetch_media_payload_async(last_music=None):
         
         artist, title = clean_media_title_artist(raw_title, raw_artist)
         
-        timeline = session.get_timeline_properties()
+        timeline = target_session.get_timeline_properties()
         position = 0
         duration = 0
         if timeline:
@@ -138,9 +173,12 @@ async def fetch_media_payload_async(last_music=None):
             if hasattr(timeline.end_time, "total_seconds"):
                 duration = int(timeline.end_time.total_seconds())
                 
-        app_id = session.source_app_user_model_id.lower() if session.source_app_user_model_id else ""
+        app_id = target_session.source_app_user_model_id.lower() if target_session.source_app_user_model_id else ""
         
         art_url, track_url, preview_url = get_itunes_meta(artist, title)
+        
+        if not art_url:
+            art_url = await get_smtc_b64_thumbnail(props)
         
         if not track_url:
             q = urllib.parse.quote(f"{artist} {title}".strip())

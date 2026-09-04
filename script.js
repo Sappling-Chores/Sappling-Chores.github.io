@@ -135,8 +135,8 @@ function updateMusicCard(music) {
   musicTitle.textContent = music.title || "No Track Detected";
   musicArtist.textContent = music.artist || "Sappling";
   
-  if (music.thumbnail && musicThumbnail) {
-    musicThumbnail.src = music.thumbnail;
+  if (musicThumbnail) {
+    musicThumbnail.src = music.thumbnail || "Assets/Group 10.png";
   }
 
   const isPlaying = !!music.isPlaying;
@@ -148,6 +148,15 @@ function updateMusicCard(music) {
     } else {
       musicBadge.classList.remove('is-playing');
       if (musicStatusLabel) musicStatusLabel.textContent = "last played";
+    }
+  }
+
+  // Only show the Play button if a 30s Audio Preview is available
+  if (musicPlayPauseBtn) {
+    if (music.audioPreview) {
+      musicPlayPauseBtn.classList.remove('hidden');
+    } else {
+      musicPlayPauseBtn.classList.add('hidden');
     }
   }
 
