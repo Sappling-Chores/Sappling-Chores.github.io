@@ -35,10 +35,114 @@ if (myTime) {
   currentTime();
 }
 
-// Live Status Widget and Dynamic Pulsing Dot Coloring
+// Live Status Widget and Music Card Controller
 const statusWidget = document.getElementById('status-widget');
 const statusDot = document.querySelector('.status-dot');
 const GIST_RAW_URL = "https://gist.githubusercontent.com/Sappling-Chores/b167ba8e2798c58ff2c497febde568ad/raw/status.json";
+
+// Music Card DOM Elements
+const musicThumbnail = document.getElementById('music-thumbnail');
+const musicTitle = document.getElementById('music-title');
+const musicArtist = document.getElementById('music-artist');
+const musicBadge = document.getElementById('music-badge');
+const musicStatusLabel = document.getElementById('music-status-label');
+const musicTrackLink = document.getElementById('music-track-link');
+const musicTimeElapsed = document.getElementById('music-time-elapsed');
+const musicTimeRemaining = document.getElementById('music-time-remaining');
+const musicProgressFill = document.getElementById('music-progress-fill');
+const musicIconPlay = document.getElementById('music-icon-play');
+const musicIconPause = document.getElementById('music-icon-pause');
+
+let currentMusicState = null;
+let musicTickerInterval = null;
+
+function formatTime(seconds) {
+  if (isNaN(seconds) || seconds < 0) return "0:00";
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+}
+
+function updateMusicCard(music) {
+  if (!music || !musicTitle) return;
+  currentMusicState = music;
+
+  musicTitle.textContent = music.title || "No Track Detected";
+  musicArtist.textContent = music.artist || "Sappling";
+  
+  if (music.thumbnail && musicThumbnail) {
+    musicThumbnail.src = music.thumbnail;
+  }
+
+  const isPlaying = !!music.isPlaying;
+  
+  if (musicBadge) {
+    if (isPlaying) {
+      musicBadge.classList.add('is-playing');
+      if (musicStatusLabel) musicStatusLabel.textContent = "playing rn";
+    } else {
+      musicBadge.classList.remove('is-playing');
+      if (musicStatusLabel) musicStatusLabel.textContent = "last played";
+    }
+  }
+
+  if (musicIconPlay && musicIconPause) {
+    if (isPlaying) {
+      musicIconPlay.classList.add('hidden');
+      musicIconPause.classList.remove('hidden');
+    } else {
+      musicIconPlay.classList.remove('hidden');
+      musicIconPause.classList.add('hidden');
+    }
+  }
+
+  if (musicTrackLink) {
+    if (music.link) {
+      musicTrackLink.href = music.link;
+      musicTrackLink.classList.remove('hidden');
+    } else {
+      musicTrackLink.classList.add('hidden');
+    }
+  }
+
+  renderMusicProgress();
+}
+
+function renderMusicProgress() {
+  if (!currentMusicState) return;
+
+  let pos = currentMusicState.position || 0;
+  let dur = currentMusicState.duration || 0;
+
+  if (currentMusicState.isPlaying && currentMusicState.updatedAt) {
+    const nowSec = Math.floor(Date.now() / 1000);
+    const elapsedSinceUpdate = nowSec - currentMusicState.updatedAt;
+    pos = pos + elapsedSinceUpdate;
+  }
+
+  if (dur > 0 && pos > dur) {
+    pos = dur;
+  }
+
+  if (musicTimeElapsed) {
+    musicTimeElapsed.textContent = formatTime(pos);
+  }
+
+  if (musicTimeRemaining) {
+    const rem = dur > pos ? dur - pos : 0;
+    musicTimeRemaining.textContent = dur > 0 ? `-${formatTime(rem)}` : "-0:00";
+  }
+
+  if (musicProgressFill) {
+    const pct = dur > 0 ? Math.min(100, Math.max(0, (pos / dur) * 100)) : 0;
+    musicProgressFill.style.width = `${pct}%`;
+  }
+}
+
+// Start smooth 1s ticker for live progress bar
+if (!musicTickerInterval) {
+  musicTickerInterval = setInterval(renderMusicProgress, 1000);
+}
 
 async function fetchPythonStatus() {
   if (!statusWidget) return;
@@ -52,6 +156,13 @@ async function fetchPythonStatus() {
     let music_artist = data.musicArtist;
     let show_status_val = "Online 🟢";
     let statusColor = "var(--dot-color)";
+
+    if (data.music) {
+      updateMusicCard(data.music);
+      if (data.music.artist) {
+        music_artist = data.music.artist;
+      }
+    }
 
     switch (status_live) {
       case statusList[0]: // Code
@@ -86,7 +197,7 @@ async function fetchPythonStatus() {
 
       case statusList[6]: // Study
         show_status_val = "Studying 😭";
-        statusColor = "rgb(88, 86, 214)"; // Sleek violet/blue instead of generic blue
+        statusColor = "rgb(88, 86, 214)";
         break;
 
       case statusList[7]: // Music
@@ -124,23 +235,16 @@ const body = document.body;
 
 function initTheme() {
   const savedTheme = localStorage.getItem('theme');
-  const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-  if (savedTheme === 'light') {
+  if (savedTheme === 'light-mode' || savedTheme === 'light') {
     body.classList.remove('dark-mode');
     body.classList.add('light-mode');
-  } else if (savedTheme === 'dark') {
+  } else if (savedTheme === 'dark-mode' || savedTheme === 'dark') {
     body.classList.remove('light-mode');
     body.classList.add('dark-mode');
   } else {
-    // Fallback to system configuration
-    if (systemDark) {
-      body.classList.remove('light-mode');
-      body.classList.add('dark-mode');
-    } else {
-      body.classList.remove('dark-mode');
-      body.classList.add('light-mode');
-    }
+    body.classList.remove('light-mode');
+    body.classList.add('dark-mode');
   }
 }
 
@@ -149,11 +253,11 @@ if (themeToggleBtn) {
     if (body.classList.contains('dark-mode')) {
       body.classList.remove('dark-mode');
       body.classList.add('light-mode');
-      localStorage.setItem('theme', 'light');
+      localStorage.setItem('theme', 'light-mode');
     } else {
       body.classList.remove('light-mode');
       body.classList.add('dark-mode');
-      localStorage.setItem('theme', 'dark');
+      localStorage.setItem('theme', 'dark-mode');
     }
   });
 }

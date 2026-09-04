@@ -6,5 +6,10 @@ status_issue_summary.md
 status_widget_roadmap.md.resolved
 status_issue_summary.md.resolved
 blog_cms_setup_guide.md
-blog_cms_setup_guide.md
 firebase_blog_guide.md
+*.log
+*.pid
+__pycache__/
+argv_test*.txt
+debug*.txt
+import_test.txt
