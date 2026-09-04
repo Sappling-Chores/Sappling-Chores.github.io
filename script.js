@@ -256,9 +256,9 @@ async function fetchPythonStatus() {
         statusColor = "rgb(88, 86, 214)";
         break;
 
-      case statusList[7]: // Music
-        show_status_val = "Listening to music 🎵";
-        statusColor = "#DAB1DA";
+      case statusList[7]: // Music (handled exclusively by floating music widget)
+        show_status_val = "Online 🟢";
+        statusColor = "var(--dot-color)";
         break;
 
       case statusList[8]:

@@ -212,16 +212,13 @@ def monitor_active_window():
                 elif "KiCad 9.0" in current_window: 
                     status_text = "KiCad"
                 elif any(artist in current_window for artist in musicArtist):
-                    status_text = "Music"
+                    status_text = "Online"
                     common = [artist for artist in musicArtist if artist in current_window]
                     artist_name = common[0]
                 elif "Physics Wallah" in current_window or "PW Video Player" in current_window: 
                     status_text = "Study"
                 elif "Chrome" in current_window and not "YouTube" in current_window: 
                     status_text = "Chrome"
-
-            if media_info and media_info.get("isPlaying") and status_text in ["Online", "Chrome"]:
-                status_text = "Music"
 
             print(f"Updating Gist -> Status: {status_text}, Music: {last_music.get('title') if last_music else 'None'} (playing: {last_music.get('isPlaying') if last_music else False})")
             update_gist(status_text, artist_name, last_music)
