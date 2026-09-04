@@ -40,7 +40,7 @@ const statusWidget = document.getElementById('status-widget');
 const statusDot = document.querySelector('.status-dot');
 const GIST_RAW_URL = "https://gist.githubusercontent.com/Sappling-Chores/b167ba8e2798c58ff2c497febde568ad/raw/status.json";
 
-// Music Card DOM Elements
+// Music Card DOM Elements & Audio Player Controller
 const musicThumbnail = document.getElementById('music-thumbnail');
 const musicTitle = document.getElementById('music-title');
 const musicArtist = document.getElementById('music-artist');
@@ -52,15 +52,80 @@ const musicTimeRemaining = document.getElementById('music-time-remaining');
 const musicProgressFill = document.getElementById('music-progress-fill');
 const musicIconPlay = document.getElementById('music-icon-play');
 const musicIconPause = document.getElementById('music-icon-pause');
+const musicPlayPauseBtn = document.getElementById('music-play-pause-btn');
+const musicFloatingWidget = document.getElementById('music-floating-widget');
+const musicToggleBtn = document.getElementById('music-toggle-btn');
 
 let currentMusicState = null;
 let musicTickerInterval = null;
+let audioPreviewInstance = null;
+let isLocalAudioPlaying = false;
+
+// Minimize / Expand Floating Widget Toggle
+if (musicToggleBtn && musicFloatingWidget) {
+  musicToggleBtn.addEventListener('click', () => {
+    musicFloatingWidget.classList.toggle('minimized');
+  });
+}
 
 function formatTime(seconds) {
   if (isNaN(seconds) || seconds < 0) return "0:00";
   const mins = Math.floor(seconds / 60);
   const secs = Math.floor(seconds % 60);
   return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+}
+
+function updatePlayPauseIcons() {
+  if (!musicIconPlay || !musicIconPause) return;
+  const isPlaying = isLocalAudioPlaying || (currentMusicState && currentMusicState.isPlaying);
+  if (isPlaying) {
+    musicIconPlay.classList.add('hidden');
+    musicIconPause.classList.remove('hidden');
+  } else {
+    musicIconPlay.classList.remove('hidden');
+    musicIconPause.classList.add('hidden');
+  }
+}
+
+// Audio Preview Playback Handler
+if (musicPlayPauseBtn) {
+  musicPlayPauseBtn.addEventListener('click', () => {
+    if (!currentMusicState) return;
+
+    if (!currentMusicState.audioPreview) {
+      if (currentMusicState.link) {
+        window.open(currentMusicState.link, '_blank');
+      }
+      return;
+    }
+
+    if (!audioPreviewInstance || audioPreviewInstance.src !== currentMusicState.audioPreview) {
+      if (audioPreviewInstance) {
+        audioPreviewInstance.pause();
+      }
+      audioPreviewInstance = new Audio(currentMusicState.audioPreview);
+      audioPreviewInstance.addEventListener('ended', () => {
+        isLocalAudioPlaying = false;
+        updatePlayPauseIcons();
+      });
+    }
+
+    if (isLocalAudioPlaying) {
+      audioPreviewInstance.pause();
+      isLocalAudioPlaying = false;
+    } else {
+      audioPreviewInstance.play().then(() => {
+        isLocalAudioPlaying = true;
+        updatePlayPauseIcons();
+      }).catch(err => {
+        console.error("Audio playback error:", err);
+        if (currentMusicState.link) {
+          window.open(currentMusicState.link, '_blank');
+        }
+      });
+    }
+    updatePlayPauseIcons();
+  });
 }
 
 function updateMusicCard(music) {
@@ -86,15 +151,7 @@ function updateMusicCard(music) {
     }
   }
 
-  if (musicIconPlay && musicIconPause) {
-    if (isPlaying) {
-      musicIconPlay.classList.add('hidden');
-      musicIconPause.classList.remove('hidden');
-    } else {
-      musicIconPlay.classList.remove('hidden');
-      musicIconPause.classList.add('hidden');
-    }
-  }
+  updatePlayPauseIcons();
 
   if (musicTrackLink) {
     if (music.link) {
@@ -114,7 +171,10 @@ function renderMusicProgress() {
   let pos = currentMusicState.position || 0;
   let dur = currentMusicState.duration || 0;
 
-  if (currentMusicState.isPlaying && currentMusicState.updatedAt) {
+  if (isLocalAudioPlaying && audioPreviewInstance) {
+    pos = Math.floor(audioPreviewInstance.currentTime);
+    dur = Math.floor(audioPreviewInstance.duration) || 30;
+  } else if (currentMusicState.isPlaying && currentMusicState.updatedAt) {
     const nowSec = Math.floor(Date.now() / 1000);
     const elapsedSinceUpdate = nowSec - currentMusicState.updatedAt;
     pos = pos + elapsedSinceUpdate;
@@ -153,15 +213,11 @@ async function fetchPythonStatus() {
     const statusList = ["Code", "Fusion-360", "KiCad", "Chrome", "Offline", "YouTube", "Study", "Music"];
 
     let status_live = data.status;
-    let music_artist = data.musicArtist;
     let show_status_val = "Online 🟢";
     let statusColor = "var(--dot-color)";
 
     if (data.music) {
       updateMusicCard(data.music);
-      if (data.music.artist) {
-        music_artist = data.music.artist;
-      }
     }
 
     switch (status_live) {
@@ -201,13 +257,13 @@ async function fetchPythonStatus() {
         break;
 
       case statusList[7]: // Music
-        show_status_val = `Listening to '${music_artist}' 🎵`;
+        show_status_val = "Listening to music 🎵";
         statusColor = "#DAB1DA";
         break;
 
       case statusList[8]:
-        show_status_val = "Offline"
-        statusColor = "#808080"
+        show_status_val = "Offline";
+        statusColor = "#808080";
         break;
     }
 

@@ -39,6 +39,7 @@ def get_itunes_meta(artist, title):
     
     art_url = ""
     track_url = ""
+    preview_url = ""
     try:
         query = f"{artist} {title}".strip()
         url = f"https://itunes.apple.com/search?term={urllib.parse.quote(query)}&media=music&entity=song&limit=1"
@@ -51,11 +52,12 @@ def get_itunes_meta(artist, title):
                 if art:
                     art_url = art.replace("100x100bb", "600x600bb")
                 track_url = item.get("trackViewUrl", "")
+                preview_url = item.get("previewUrl", "")
     except Exception as e:
         print("iTunes lookup exception:", e)
         
-    _ITUNES_CACHE[cache_key] = (art_url, track_url)
-    return art_url, track_url
+    _ITUNES_CACHE[cache_key] = (art_url, track_url, preview_url)
+    return art_url, track_url, preview_url
 
 async def fetch_media_payload_async(last_music=None):
     if not HAS_WINRT:
@@ -98,7 +100,7 @@ async def fetch_media_payload_async(last_music=None):
                 
         app_id = session.source_app_user_model_id.lower() if session.source_app_user_model_id else ""
         
-        art_url, track_url = get_itunes_meta(artist, title)
+        art_url, track_url, preview_url = get_itunes_meta(artist, title)
         
         if not track_url:
             q = urllib.parse.quote(f"{title} {artist}".strip())
@@ -113,6 +115,7 @@ async def fetch_media_payload_async(last_music=None):
             "album": album,
             "thumbnail": art_url,
             "link": track_url,
+            "audioPreview": preview_url,
             "isPlaying": is_playing,
             "position": position,
             "duration": duration,
